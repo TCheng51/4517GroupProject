@@ -3,8 +3,16 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MemberController;
 
-Route::get('/', [MemberController::class, 'home'])->name('home');
-Route::get('/home', [MemberController::class, 'home']);
+Route::get('/', [MemberController::class, 'home'])->name('index');
+Route::redirect('/home', '/')->name('home');
+Route::redirect('/frontend', '/');
+Route::redirect('/frontend/index.html', '/');
+Route::redirect('/frontend/register.html', '/register');
+Route::redirect('/frontend/login.html', '/login');
+Route::redirect('/frontend/reservation.html', '/reservation');
+Route::redirect('/frontend/thankyou.html', '/thankyou');
+Route::redirect('/frontend/login.php', '/login');
+Route::redirect('/frontend/reserve.php', '/reservation');
 
 Route::get('/register', [MemberController::class, 'create'])->name('register');
 Route::post('/register', [MemberController::class, 'store'])->name('register.store');

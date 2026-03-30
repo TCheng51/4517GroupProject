@@ -1,67 +1,84 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-<h2>Make a Reservation</h2>
+<div class="shell page">
+    <section class="split-panel">
+        <div class="form-panel">
+            <p class="eyebrow">Reservations</p>
+            <h2 class="section-title">Reserve a table or private room at Fabel.</h2>
+            <p class="page-intro">Choose a date, session, and story-genre space that fits your boardgame and group size.</p>
 
-<form action="/reservation" method="post" class="registration-form">
-    @csrf
-    <div class="form-group">
-        <label for="reservation_date">Date</label>
-        <div class="input-wrapper">
-            <input type="date" id="reservation_date" name="reservation_date" required value="{{ old('reservation_date') }}">
-            @error('reservation_date')
-            <small class="text-danger">{{ $message }}</small>
-            @enderror
+            <form action="{{ route('reservation.submit') }}" method="post">
+                @csrf
+                <div class="field-grid">
+                    <div class="form-group">
+                        <label for="reservation_date">Reservation date</label>
+                        <input type="date" id="reservation_date" name="reservation_date" data-reservation-date required value="{{ old('reservation_date') }}">
+                        @error('reservation_date')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="time_slot">Time slot</label>
+                        <select id="time_slot" name="time_slot" required>
+                            <option value="">Select a time slot</option>
+                            <option value="2:00-4:00" {{ old('time_slot') == '2:00-4:00' ? 'selected' : '' }}>2:00 PM to 4:00 PM</option>
+                            <option value="6:00-9:00" {{ old('time_slot') == '6:00-9:00' ? 'selected' : '' }}>6:00 PM to 9:00 PM</option>
+                            <option value="9:00-11:00" {{ old('time_slot') == '9:00-11:00' ? 'selected' : '' }}>9:00 PM to 11:00 PM</option>
+                        </select>
+                        @error('time_slot')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="form-group form-span-2">
+                        <label for="table_room">Table or room theme</label>
+                        <select id="table_room" name="table_room" data-room-select required>
+                            <option value="">Choose a story room</option>
+                            <option value="fantasy-hearth" {{ old('table_room') == 'fantasy-hearth' ? 'selected' : '' }}>Fantasy Hearth — 4 players</option>
+                            <option value="mythic-garden" {{ old('table_room') == 'mythic-garden' ? 'selected' : '' }}>Mythic Garden — 4 players</option>
+                            <option value="iron-archive" {{ old('table_room') == 'iron-archive' ? 'selected' : '' }}>Iron Archive — 4 players</option>
+                            <option value="starlight-orbit" {{ old('table_room') == 'starlight-orbit' ? 'selected' : '' }}>Starlight Orbit — 6 players</option>
+                            <option value="clockwork-vault" {{ old('table_room') == 'clockwork-vault' ? 'selected' : '' }}>Clockwork Vault — 6 players</option>
+                            <option value="storykeeper-suite" {{ old('table_room') == 'storykeeper-suite' ? 'selected' : '' }}>Storykeeper Suite — 8 players</option>
+                        </select>
+                        @error('table_room')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Confirm Reservation</button>
+                    <button type="reset" class="btn btn-secondary">Clear Selection</button>
+                </div>
+            </form>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label for="time_slot">Time Slot</label>
-        <div class="input-wrapper">
-            <select id="time_slot" name="time_slot">
-                <option value="">Select a time slot...</option>
-                <option value="10:00-12:00" {{ old('time_slot') == '10:00-12:00' ? 'selected' : '' }}>10:00 AM - 12:00 PM</option>
-                <option value="12:00-14:00" {{ old('time_slot') == '12:00-14:00' ? 'selected' : '' }}>12:00 PM - 2:00 PM</option>
-                <option value="14:00-16:00" {{ old('time_slot') == '14:00-16:00' ? 'selected' : '' }}>2:00 PM - 4:00 PM</option>
-                <option value="16:00-18:00" {{ old('time_slot') == '16:00-18:00' ? 'selected' : '' }}>4:00 PM - 6:00 PM</option>
-                <option value="18:00-20:00" {{ old('time_slot') == '18:00-20:00' ? 'selected' : '' }}>6:00 PM - 8:00 PM</option>
-                <option value="20:00-22:00" {{ old('time_slot') == '20:00-22:00' ? 'selected' : '' }}>8:00 PM - 10:00 PM</option>
-            </select>
-            @error('time_slot')
-            <small class="text-danger">{{ $message }}</small>
-            @enderror
-        </div>
-    </div>
+        <aside class="side-panel">
+            <article class="table-preview">
+                <span class="preview-badge">Room Preview</span>
+                <h3 data-room-title>Choose a story room</h3>
+                <p data-room-mood>Each space in Fabel is styled around a different genre so your table feels like part of the game.</p>
+                <p class="story-meta" data-room-capacity>Capacity will appear here</p>
+                <p data-room-detail>Select a room to preview the atmosphere and the best fit for your session.</p>
+            </article>
 
-    <div class="form-group">
-        <label for="table_room">Select Table / Room</label>
-        <div class="input-wrapper">
-            <select id="table_room" name="table_room">
-                <option value="">Select a table/room...</option>
-                <option value="standard1" {{ old('table_room') == 'standard1' ? 'selected' : '' }}>Standard Room 1 (4 players)</option>
-                <option value="standard2" {{ old('table_room') == 'standard2' ? 'selected' : '' }}>Standard Room 2 (4 players)</option>
-                <option value="standard3" {{ old('table_room') == 'standard3' ? 'selected' : '' }}>Standard Room 3 (4 players)</option>
-                <option value="premium1" {{ old('table_room') == 'premium1' ? 'selected' : '' }}>Premium Room 1 (6 players)</option>
-                <option value="premium2" {{ old('table_room') == 'premium2' ? 'selected' : '' }}>Premium Room 2 (6 players)</option>
-                <option value="VIP" {{ old('table_room') == 'VIP' ? 'selected' : '' }}>VIP Room (8 players)</option>
-            </select>
-            @error('table_room')
-            <small class="text-danger">{{ $message }}</small>
-            @enderror
-        </div>
-    </div>
+            <article class="info-box">
+                <p class="story-meta">Reservation Notes</p>
+                <ul class="check-list">
+                    <li>Reservations must be placed for a future date.</li>
+                    <li>Choose the setting that best matches your game for a stronger atmosphere.</li>
+                    <li>Food and beverage service continues at the table throughout your session.</li>
+                </ul>
+            </article>
 
-    <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Reserve</button>
-        <button type="reset" class="btn btn-secondary">Clear</button>
-    </div>
-</form>
-
-<div class="navigation-buttons">
-    <a href="{{ route('home') }}" class="btn btn-outline">← Back to Home</a>
-    <a href="{{ route('register') }}" class="btn btn-outline">Member Registration</a>
-    <a href="{{ route('login') }}" class="btn btn-outline">Login to Reserve</a>
-</div>
+            <div class="inline-links">
+                <a href="{{ route('login') }}" class="btn btn-outline">Member Login</a>
+                <a href="{{ route('index') }}" class="btn btn-outline">Back Home</a>
+            </div>
+        </aside>
+    </section>
 </div>
 @endsection

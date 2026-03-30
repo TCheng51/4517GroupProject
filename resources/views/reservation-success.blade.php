@@ -1,43 +1,57 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-<div class="success-message">
-    <h2>🎉 Reservation Confirmed!</h2>
-    <p>Your reservation has been successfully created. We look forward to seeing you!</p>
-</div>
+<div class="shell page">
+    <section class="panel">
+        <span class="status-pill success">Reservation Confirmed</span>
+        <h2 class="section-title">Your table at Fabel has been set.</h2>
+        <p class="page-intro">We are ready to host your group with the room, atmosphere, and service that fits your session.</p>
 
-<div class="reservation-details">
-    <h3>Reservation Information</h3>
-    <div class="reservation-info">
-        <p><strong>Reservation ID:</strong> {{ $reservation->id ?? 'N/A' }}</p>
-        <p><strong>Date:</strong> {{ $reservation->reservation_date ?? 'N/A' }}</p>
-        <p><strong>Time Slot:</strong> {{ $reservation->time_slot ?? 'N/A' }}</p>
-        <p><strong>Table/Room:</strong> {{ $reservation->table_room ?? 'N/A' }}</p>
-        <p><strong>Status:</strong> {{ $reservation->status ?? 'pending' }}</p>
-    </div>
-    
-    <h3>Important Information</h3>
-    <div class="info-box">
-        <ul>
-            <li>Please arrive 10 minutes before your scheduled time</li>
-            <li>Bring your member ID for check-in</li>
-            <li>Our game library will be available for your selection</li>
-            <li>Food and beverage service starts upon arrival</li>
-        </ul>
-    </div>
-    
-    <h3>Need to Make Changes?</h3>
-    <div class="info-box">
-        <p>If you need to modify or cancel your reservation, please contact us at least 2 hours before your scheduled time.</p>
-        <p>Email: reservations@diceanddine.com<br>
-        Phone: (852) 1234-5678</p>
-    </div>
-</div>
+        <div class="detail-grid">
+            <article class="detail-item">
+                <span>Reservation ID</span>
+                <strong>{{ $reservation->id ?? 'N/A' }}</strong>
+            </article>
+            <article class="detail-item">
+                <span>Date</span>
+                <strong>{{ $reservation->reservation_date ?? 'N/A' }}</strong>
+            </article>
+            <article class="detail-item">
+                <span>Time Slot</span>
+                <strong>{{ $reservation->time_slot ?? 'N/A' }}</strong>
+            </article>
+            <article class="detail-item">
+                <span>Story Room</span>
+                <strong>{{ $reservation->table_room ?? 'N/A' }}</strong>
+            </article>
+        </div>
 
-<div class="navigation-buttons">
-    <a href="{{ route('reservation') }}" class="btn btn-primary">Make Another Reservation</a>
-    <a href="{{ route('home') }}" class="btn btn-outline">← Back to Home</a>
-</div>
+        <div class="cards-grid">
+            <article class="info-box">
+                <h3>Before you arrive</h3>
+                <ul class="check-list">
+                    <li>Plan to arrive around 10 minutes early.</li>
+                    <li>Have your member details ready for check-in.</li>
+                    <li>Bring the boardgame you booked the room around, or explore the cafe library on site.</li>
+                </ul>
+            </article>
+
+            <article class="info-box">
+                <h3>Need to update plans?</h3>
+                <p>For changes to your booking, contact the cafe before the session so we can help rework the evening smoothly.</p>
+            </article>
+
+            <article class="info-box">
+                <h3>Contact Fabel</h3>
+                <p>Email: reservations@fabelcafe.com</p>
+                <p>Phone: (852) 1234 5678</p>
+            </article>
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="{{ route('reservation') }}" class="btn btn-primary">Book Another Session</a>
+            <a href="{{ route('index') }}" class="btn btn-outline">Back Home</a>
+        </div>
+    </section>
 </div>
 @endsection

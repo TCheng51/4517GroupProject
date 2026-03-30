@@ -1,47 +1,37 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-<div class="confirmation-message">
-    <h2>📅 Confirm Your Reservation</h2>
-    <p>Please review your reservation details before submitting.</p>
-</div>
+<div class="shell page">
+    <section class="panel">
+        <p class="eyebrow">Reservation Guide</p>
+        <h2 class="section-title">Review the evening before you book.</h2>
+        <p class="page-intro">Fabel reservations are designed to make each session feel hosted, comfortable, and matched to your game.</p>
 
-<div class="confirmation-details">
-    <h3>Reservation Information</h3>
-    <p>You are about to make a reservation at Dice & Dine Boardgame Café.</p>
-    
-    <div class="info-box">
-        <h4>Reservation Policy</h4>
-        <ul>
-            <li>Reservations must be made at least 24 hours in advance</li>
-            <li>Please arrive 10 minutes before your scheduled time</li>
-            <li>Cancellations should be made at least 2 hours before</li>
-            <li>Each reservation is for a maximum of 4 hours</li>
-        </ul>
-    </div>
-    
-    <div class="info-box">
-        <h4>What to Expect</h4>
-        <ul>
-            <li>Access to our extensive boardgame library</li>
-            <li>Dedicated table space for your group</li>
-            <li>Food and beverage service available</li>
-            <li>Game master assistance if needed</li>
-        </ul>
-    </div>
-    
-    <div class="actions">
-        <form action="{{ route('reservation.submit') }}" method="post">
-            @csrf
-            <button type="submit" class="btn btn-primary">Confirm Reservation</button>
-        </form>
-        
-        <div class="navigation-buttons">
-            <a href="{{ route('reservation') }}" class="btn btn-outline">← Back to Reservation Form</a>
-            <a href="{{ route('home') }}" class="btn btn-outline">Back to Home</a>
+        <div class="cards-grid">
+            <article class="info-box">
+                <h3>Before arrival</h3>
+                <ul class="check-list">
+                    <li>Book at least one day ahead whenever possible for the best room choice.</li>
+                    <li>Arrive a little early so your group can settle in before the first turn.</li>
+                    <li>Choose the room theme that fits your boardgame and group size.</li>
+                </ul>
+            </article>
+
+            <article class="info-box">
+                <h3>During the session</h3>
+                <p>You will have a dedicated table or room, access to Fabel cafe service, and a setting designed to support the tone of your evening.</p>
+            </article>
+
+            <article class="info-box">
+                <h3>Need changes?</h3>
+                <p>If plans shift, return to the reservation form and create a new booking that better matches your updated session.</p>
+            </article>
         </div>
-    </div>
-</div>
+
+        <div class="navigation-buttons">
+            <a href="{{ route('reservation') }}" class="btn btn-primary">Open Reservation Form</a>
+            <a href="{{ route('index') }}" class="btn btn-outline">Back Home</a>
+        </div>
+    </section>
 </div>
 @endsection
