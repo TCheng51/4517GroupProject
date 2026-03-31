@@ -1,2 +1,2 @@
-# 4517Project
-Project Data For Subject 4517
+# SEHS4517-Group Project
+Project Data for the Group Project of SEHS4517
