@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'Fabel | Every game tells a story' }}</title>
-    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
-    <script src="{{ asset('frontend/js/script.js') }}" defer></script>
+    @vite(['resources/css/style.css', 'resources/js/app.js'])
 </head>
 <body>
     @include('partials.header')
