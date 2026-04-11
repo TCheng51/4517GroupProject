@@ -127,6 +127,110 @@ class MemberController extends Controller
         return view('reservation-success', compact('reservation'));
     }
 
+    public function showMenu()
+    {
+        return view('menu');
+    }
+
+    public function showRoomStatus()
+    {
+        // Define room themes with their information
+        $roomThemes = [
+            'fantasy-hearth' => [
+                'name' => 'Fantasy Hearth',
+                'capacity' => 4,
+                'description' => 'A cozy medieval tavern setting with warm lighting, wooden tables, and fantasy decor perfect for RPG sessions.'
+            ],
+            'mythic-garden' => [
+                'name' => 'Mythic Garden',
+                'capacity' => 4,
+                'description' => 'An enchanted forest atmosphere with lush greenery, natural elements, and mystical ambiance.'
+            ],
+            'iron-archive' => [
+                'name' => 'Iron Archive',
+                'capacity' => 4,
+                'description' => 'A steampunk library setting with metal accents, gears, and Victorian-inspired decor.'
+            ],
+            'starlight-orbit' => [
+                'name' => 'Starlight Orbit',
+                'capacity' => 6,
+                'description' => 'A futuristic space station theme with cosmic lighting and sci-fi elements.'
+            ],
+            'clockwork-vault' => [
+                'name' => 'Clockwork Vault',
+                'capacity' => 6,
+                'description' => 'A mysterious mechanical chamber with intricate clockwork mechanisms and puzzle-solving atmosphere.'
+            ],
+            'storykeeper-suite' => [
+                'name' => 'Storykeeper Suite',
+                'capacity' => 8,
+                'description' => 'A grand literary salon with bookshelves, comfortable seating, and storytelling ambiance.'
+            ]
+        ];
+
+        $timeSlots = ['2:00-4:00', '6:00-9:00', '9:00-11:00'];
+
+        // Get today's reservations grouped by room
+        $todayReservations = Reservation::with('member')
+            ->whereDate('reservation_date', today())
+            ->get()
+            ->groupBy('table_room');
+
+        // Calculate room availability
+        $roomAvailability = [];
+        foreach ($roomThemes as $roomTheme => $roomInfo) {
+            $roomAvailability[$roomTheme] = [];
+            foreach ($timeSlots as $slot) {
+                $reservationsInSlot = $todayReservations->get($roomTheme, collect())
+                    ->where('time_slot', $slot)
+                    ->where('status', '!=', 'cancelled')
+                    ->count();
+                
+                // Calculate available spots based on room capacity
+                $maxCapacity = $roomInfo['capacity'];
+                $roomAvailability[$roomTheme][$slot] = max(0, $maxCapacity - $reservationsInSlot);
+            }
+        }
+
+        // Calculate statistics
+        $totalReservations = $todayReservations->flatten()->count();
+        $pendingReservations = $todayReservations->flatten()->where('status', 'pending')->count();
+        $confirmedReservations = $todayReservations->flatten()->where('status', 'confirmed')->count();
+        
+        // Count available rooms (rooms with at least one available slot)
+        $availableRooms = 0;
+        foreach ($roomAvailability as $roomSlots) {
+            foreach ($roomSlots as $available) {
+                if ($available > 0) {
+                    $availableRooms++;
+                    break;
+                }
+            }
+        }
+
+        return view('room-status', compact(
+            'roomThemes',
+            'timeSlots',
+            'todayReservations',
+            'roomAvailability',
+            'totalReservations',
+            'pendingReservations',
+            'confirmedReservations',
+            'availableRooms'
+        ));
+    }
+
+    public function updateRoomStatus(Request $request, Reservation $reservation)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:confirmed,cancelled'
+        ]);
+
+        $reservation->update(['status' => $validated['status']]);
+
+        return redirect()->route('room-status')->with('success', 'Reservation status updated successfully!');
+    }
+
     public function logout(Request $request)
     {
         Auth::guard('web')->logout();
