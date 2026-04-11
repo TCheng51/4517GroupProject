@@ -429,7 +429,6 @@ button {
 }
 
 .section-grid,
-.cards-grid,
 .room-grid,
 .detail-grid,
 .stats-grid {
@@ -438,7 +437,24 @@ button {
 }
 
 .cards-grid {
+    display: grid;
+    gap: 32px;
+}
+
+.cards-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.menu-section {
+    margin-bottom: 3rem;
+}
+
+.menu-section:last-child {
+    margin-bottom: 0;
+}
+
+.menu-section .cards-grid {
+    margin-top: 2rem;
 }
 
 .room-grid {

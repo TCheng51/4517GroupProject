@@ -36,6 +36,10 @@ Route::get('/reservation/success', [MemberController::class, 'reservationSuccess
 
 Route::post('/logout', [MemberController::class, 'logout'])->name('logout');
 
+Route::get('/menu', [MemberController::class, 'showMenu'])->name('menu');
+Route::get('/room-status', [MemberController::class, 'showRoomStatus'])->name('room-status');
+Route::post('/room-status/{reservation}', [MemberController::class, 'updateRoomStatus'])->name('room-status.update');
+
 Route::get('/thankyou', function () {
     return view('thankyou');
 })->name('thankyou');
