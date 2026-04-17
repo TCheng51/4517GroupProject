@@ -13,36 +13,19 @@
         <article class="story-card">
             <div class="story-icon" aria-hidden="true">
                 @if($roomTheme === 'fantasy')
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M6 20V9l6-5 6 5v11" />
-                        <path d="M9.5 20v-6h5v6" />
-                    </svg>
+                    <i data-lucide="castle"></i>
                 @elseif($roomTheme === 'scifi')
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3.5" />
-                        <path d="M19.5 12h1.5" />
-                        <path d="M3 12h1.5" />
-                        <path d="M12 3v1.5" />
-                        <path d="M12 19.5V21" />
-                        <path d="m17.3 6.7 1 1" />
-                        <path d="m5.7 18.3 1 1" />
-                        <path d="m18.3 18.3-1 1" />
-                        <path d="m6.7 6.7-1 1" />
-                    </svg>
+                    <i data-lucide="orbit"></i>
                 @else
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 18c2.5-4.5 5-6.5 7-6.5S16.5 13.5 19 18" />
-                        <path d="M12 11.5V4" />
-                        <path d="m9 7 3-3 3 3" />
-                    </svg>
+                    <i data-lucide="leaf"></i>
                 @endif
             </div>
             <p class="story-meta">{{ $roomInfo['capacity'] }} players</p>
             <h3>{{ $roomInfo['name'] }}</h3>
             <p>{{ $roomInfo['description'] }}</p>
 
-            <div class="check-list">
-                <h4>Availability Status</h4>
+            <h4>Availability Status</h4>
+            <ul class="check-list">
                 @foreach($timeSlots as $slot)
                     <li>
                         <strong>{{ $slot }}</strong>
@@ -53,7 +36,7 @@
                         @endif
                     </li>
                 @endforeach
-            </div>
+            </ul>
         </article>
         @endforeach
     </div>
