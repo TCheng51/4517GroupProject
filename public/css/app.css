@@ -361,7 +361,7 @@ button {
 .timeline-card {
     border-radius: var(--radius-lg);
     border: 1px solid var(--line);
-    background: rgba(255, 249, 240, 0.72);
+    background: rgba(255, 249, 240, 0.92);
     box-shadow: var(--shadow-soft);
 }
 
