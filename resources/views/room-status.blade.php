@@ -41,36 +41,6 @@
             <h3>{{ $roomInfo['name'] }}</h3>
             <p>{{ $roomInfo['description'] }}</p>
 
-            <div>
-                <h4>Today's Reservations</h4>
-                @if(isset($todayReservations[$roomTheme]) && $todayReservations[$roomTheme]->isNotEmpty())
-                    <ul class="timeline-list">
-                        @foreach($todayReservations[$roomTheme] as $reservation)
-                        <li>
-                            <strong>{{ $reservation->time_slot }}</strong> - {{ $reservation->member->first_name }} {{ $reservation->member->last_name }}
-                            <div class="hero-actions">
-                                <span class="status-pill @if($reservation->status === 'confirmed') success @elseif($reservation->status === 'cancelled') danger @endif">{{ ucfirst($reservation->status) }}</span>
-                                @if($reservation->status === 'pending')
-                                    <form action="{{ route('room-status.update', $reservation->id) }}" method="post" class="inline-form">
-                                        @csrf
-                                        <input type="hidden" name="status" value="confirmed">
-                                        <button type="submit" class="btn btn-primary">Confirm</button>
-                                    </form>
-                                    <form action="{{ route('room-status.update', $reservation->id) }}" method="post" class="inline-form">
-                                        @csrf
-                                        <input type="hidden" name="status" value="cancelled">
-                                        <button type="submit" class="btn btn-outline">Cancel</button>
-                                    </form>
-                                @endif
-                            </div>
-                        </li>
-                        @endforeach
-                    </ul>
-                @else
-                    <p>No reservations for today</p>
-                @endif
-            </div>
-
             <div class="check-list">
                 <h4>Availability Status</h4>
                 @foreach($timeSlots as $slot)
