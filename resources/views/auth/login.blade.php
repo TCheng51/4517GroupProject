@@ -6,7 +6,7 @@
         <div class="form-panel">
             <p class="eyebrow">Member Login</p>
             <h2 class="section-title">Sign in to reserve your next table.</h2>
-            <p class="page-intro">Use your Fabel membership to book themed rooms and manage your next visit.</p>
+            <p class="page-intro">Use your Fable membership to book themed rooms and manage your next visit.</p>
 
             <form action="{{ route('login.submit') }}" method="post">
                 @csrf
@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Enter Fabel</button>
+                    <button type="submit" class="btn btn-primary">Enter Fable</button>
                 </div>
             </form>
         </div>

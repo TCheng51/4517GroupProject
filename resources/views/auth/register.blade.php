@@ -5,7 +5,7 @@
     <section class="split-panel">
         <div class="form-panel">
             <p class="eyebrow">Membership</p>
-            <h2 class="section-title">Join Fabel and start reserving story-led tables.</h2>
+            <h2 class="section-title">Join Fable and start reserving story-led tables.</h2>
             <p class="page-intro">Create your member account to unlock reservations, smoother check-in, and a regular place at the tavern.</p>
 
             <form action="{{ route('register.store') }}" method="post">
@@ -79,7 +79,7 @@
         <aside class="side-panel">
             <article class="info-box">
                 <p class="story-meta">Member Benefits</p>
-                <h3>What your Fabel account unlocks</h3>
+                <h3>What your Fable account unlocks</h3>
                 <ul class="check-list">
                     <li>Reserve specific story rooms for the atmosphere that suits your game.</li>
                     <li>Return faster for future visits with your member number already on file.</li>

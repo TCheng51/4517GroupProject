@@ -6,14 +6,14 @@
         <div class="hero-inner">
             <div class="hero-copy">
                 <p class="eyebrow">Storybook Tavern Experience</p>
-                <h2 class="page-title">Fabel turns game night into a setting.</h2>
+                <h2 class="page-title">Fable turns game night into a setting.</h2>
                 <p class="lead">
-                    Fabel is a boardgame cafe built like a welcoming tavern. Guests gather for modern boardgames,
+                    Fable is a boardgame cafe built like a welcoming tavern. Guests gather for modern boardgames,
                     comfort food, and thoughtfully themed spaces where the table, lighting, and atmosphere match the story
                     they want to play.
                 </p>
                 <div class="hero-actions">
-                    <a href="{{ route('register') }}" class="btn btn-primary">Join Fabel</a>
+                    <a href="{{ route('register') }}" class="btn btn-primary">Join Fable</a>
                     <a href="{{ route('reservation') }}" class="btn btn-outline">Explore Rooms</a>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                             <path d="M14 15v3" />
                         </svg>
                     </div>
-                    <p class="kicker">Inside Fabel</p>
+                    <p class="kicker">Inside Fable</p>
                     <h3>Warm timber, amber light, and shelves full of worlds.</h3>
                     <ul class="ambient-list">
                         <li>Genre-inspired tables and private rooms for fantasy, sci-fi, mystery, and beyond.</li>
@@ -98,7 +98,7 @@
         <p class="eyebrow">Choose A Setting</p>
         <h2 class="section-title">Story-genre rooms across the cafe</h2>
         <p class="page-intro">
-            Each Fabel space carries its own visual language, so your group can choose an atmosphere that deepens the experience.
+            Each Fable space carries its own visual language, so your group can choose an atmosphere that deepens the experience.
         </p>
         <div class="room-grid">
             <article class="story-card">

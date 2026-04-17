@@ -4,7 +4,7 @@
 <div class="shell page">
     <section class="panel">
         <span class="status-pill success">Membership Created</span>
-        <h2 class="section-title">Your place at Fabel is ready.</h2>
+        <h2 class="section-title">Your place at Fable is ready.</h2>
         <p class="page-intro">You can now sign in, choose a story room, and plan your first tavern session.</p>
 
         <div class="detail-grid">
