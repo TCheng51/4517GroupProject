@@ -8,6 +8,16 @@
             <h2 class="section-title">Reserve a table or private room at Fabel.</h2>
             <p class="page-intro">Choose a date, session, and story-genre space that fits your boardgame and group size.</p>
 
+            <div class="login-status">
+                <p class="login-label">Login:
+                    @if(Auth::check())
+                    <span class="member-info">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }} ({{ Auth::user()->email }})</span>
+                    @else
+                    <span class="guest-info">Guest</span>
+                    @endif
+                </p>
+            </div>
+
             <form action="{{ route('reservation.submit') }}" method="post">
                 @csrf
                 <div class="field-grid">
@@ -15,7 +25,7 @@
                         <label for="reservation_date">Reservation date</label>
                         <input type="date" id="reservation_date" name="reservation_date" data-reservation-date required value="{{ old('reservation_date') }}">
                         @error('reservation_date')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
@@ -28,7 +38,7 @@
                             <option value="9:00-11:00" {{ old('time_slot') == '9:00-11:00' ? 'selected' : '' }}>9:00 PM to 11:00 PM</option>
                         </select>
                         @error('time_slot')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
@@ -44,7 +54,7 @@
                             <option value="storykeeper-suite" {{ old('table_room') == 'storykeeper-suite' ? 'selected' : '' }}>Storykeeper Suite — 8 players</option>
                         </select>
                         @error('table_room')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
