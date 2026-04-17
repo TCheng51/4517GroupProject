@@ -3,12 +3,16 @@
 .env
 .env.backup
 .env.production
+.codex-remove-agent-coauthors.py
 .phpactor.json
 .phpunit.result.cache
+*-after-fix.png
 /.fleet
 /.idea
 /.nova
 /.phpunit.cache
+/.playwright-mcp
+/.remember
 /.vscode
 /.zed
 /auth.json

@@ -1,17 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="shell page">
-    <section class="panel">
-        <span class="status-pill success">
-            <i data-lucide="calendar-check" aria-hidden="true"></i>
-            Reservation Confirmed
-        </span>
-        <h2 class="section-title">Your table at Fable has been set.</h2>
-        <p class="page-intro">We are ready to host your group with the room, atmosphere, and service that fits your session.</p>
+<div class="shell page reservation-success-page">
+    <section class="panel reservation-success-panel" aria-labelledby="reservation-success-title">
+        <header class="confirmation-head">
+            <span class="status-pill success">
+                <i data-lucide="calendar-check" aria-hidden="true"></i>
+                Reservation Confirmed
+            </span>
+            <h1 class="section-title" id="reservation-success-title">Your table at Fable has been set.</h1>
+            <p class="page-intro">We are ready to host your group with the room, atmosphere, and service that fits your session.</p>
+        </header>
 
         @if(session('email_simulated'))
-            <p class="status-pill success">{{ session('email_simulated') }}</p>
+            <p class="confirmation-notice" role="status">{{ session('email_simulated') }}</p>
         @endif
 
         <div class="detail-grid">
@@ -48,10 +50,10 @@
         </div>
 
         @if($reservation->reservationMenuItems->isNotEmpty())
-        <section class="info-box">
-            <h3>Pre-order Estimate</h3>
+        <section class="info-box order-summary" aria-labelledby="preorder-estimate-title">
+            <h3 id="preorder-estimate-title">Pre-order Estimate</h3>
             <div class="table-wrap">
-                <table class="data-table">
+                <table class="data-table reservation-summary-table">
                     <thead>
                         <tr>
                             <th>Item</th>
@@ -70,11 +72,11 @@
                     </tbody>
                 </table>
             </div>
-            <p class="story-meta">Estimated total: HK$ {{ number_format($reservation->menu_total, 2) }}</p>
+            <p class="story-meta order-total">Estimated total: HK$ {{ number_format($reservation->menu_total, 2) }}</p>
         </section>
         @endif
 
-        <div class="cards-grid">
+        <div class="cards-grid confirmation-cards">
             <article class="info-box">
                 <h3>Before you arrive</h3>
                 <ul class="check-list">
@@ -95,8 +97,8 @@
 
             <article class="info-box">
                 <h3>Contact Fable</h3>
-                <p>Email: reservations@fabelcafe.com</p>
-                <p>Phone: (852) 1234 5678</p>
+                <p>Email: <a href="mailto:reservations@fabelcafe.com" class="contact-link">reservations@fabelcafe.com</a></p>
+                <p>Phone: <a href="tel:+85212345678" class="contact-link">(852) 1234 5678</a></p>
             </article>
         </div>
 

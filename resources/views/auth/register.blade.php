@@ -86,7 +86,11 @@
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Create Membership</button>
-                    <button type="reset" class="btn btn-secondary">Clear Form</button>
+                    <button type="reset" class="btn btn-ghost">Clear Form</button>
+                    <p class="auth-switch">
+                        Already a member?
+                        <a href="{{ route('login') }}">Log in</a>
+                    </p>
                 </div>
             </form>
         </div>
@@ -107,11 +111,6 @@
                 <h3>Groups who plan their evenings around the game.</h3>
                 <p>Whether you are hosting a first visit or a regular campaign night, membership keeps your next session easy to book.</p>
             </article>
-
-            <div class="inline-links">
-                <a href="{{ route('index') }}" class="btn btn-outline">Back Home</a>
-                <a href="{{ route('login') }}" class="btn btn-outline">Already A Member</a>
-            </div>
         </aside>
     </section>
 </div>

@@ -10,7 +10,8 @@
 
             <div class="login-status">
                 <div class="login-content">
-                    <p class="login-label">Login: 
+                    <p class="login-label">
+                        <span class="login-label-text">Login:</span>
                         @if(Auth::check())
                             <span class="member-info">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }} ({{ Auth::user()->email }})</span>
                         @else

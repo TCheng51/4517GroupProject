@@ -29,13 +29,15 @@
                 };
             @endphp
             <section class="menu-section">
-                <div class="story-card">
-                    <div class="story-icon" aria-hidden="true">
+                <header class="menu-section-header">
+                    <div class="menu-section-icon" aria-hidden="true">
                         <i data-lucide="{{ $categoryIcon }}"></i>
                     </div>
-                    <p class="story-meta">{{ $category }}</p>
-                    <h3>{{ $category }}</h3>
-                    <p>
+                    <div class="menu-section-heading">
+                        <p class="eyebrow">Category</p>
+                        <h3>{{ $category }}</h3>
+                    </div>
+                    <p class="menu-section-desc">
                         @if($category === 'Beverages')
                             Drinks for the start of the quest.
                         @elseif($category === 'Snacks')
@@ -46,22 +48,28 @@
                             Sweet rewards for the final round.
                         @endif
                     </p>
-                </div>
+                </header>
 
-                <div class="cards-grid">
+                <div class="menu-grid">
                     @foreach($items as $item)
-                        <article class="feature-card">
-                            <div class="feature-icon" aria-hidden="true">
-                                <i data-lucide="{{ $itemIcon }}"></i>
+                        <article class="menu-item-card">
+                            <div class="menu-item-head">
+                                <div class="feature-icon" aria-hidden="true">
+                                    <i data-lucide="{{ $itemIcon }}"></i>
+                                </div>
+                                <h3>{{ $item->name }}</h3>
                             </div>
-                            <h3>{{ $item->name }}</h3>
-                            <p>{{ $item->description }}</p>
-                            <p class="story-meta">
-                                HK$ {{ number_format((float) $item->price, 2) }}
+                            <p class="menu-item-desc">{{ $item->description }}</p>
+                            <div class="menu-item-meta">
+                                <span class="menu-item-price">HK$ {{ number_format((float) $item->price, 2) }}</span>
                                 @if($item->tags)
-                                    | {{ implode(' | ', $item->tags) }}
+                                    <span class="menu-item-tags">
+                                        @foreach($item->tags as $tag)
+                                            <span class="tag-chip">{{ $tag }}</span>
+                                        @endforeach
+                                    </span>
                                 @endif
-                            </p>
+                            </div>
                         </article>
                     @endforeach
                 </div>

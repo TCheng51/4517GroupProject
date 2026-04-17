@@ -405,6 +405,12 @@ class MemberController extends Controller
     public function updateRoomStatus(UpdateRoomStatusRequest $request, Reservation $reservation): \Illuminate\Http\RedirectResponse
     {
         $status = $request->validated()['status'];
+        $query = $request->only(['date', 'room']);
+        $statusFilter = $request->input('status_filter');
+
+        if (in_array($statusFilter, ['pending', 'confirmed', 'cancelled'], true)) {
+            $query['status'] = $statusFilter;
+        }
 
         $reservation->update([
             'status' => $status,
@@ -416,7 +422,7 @@ class MemberController extends Controller
         $this->sendReservationMail($reservation, $status);
 
         return redirect()
-            ->route('room-status', $request->only(['date', 'room', 'status']))
+            ->route('room-status', $query)
             ->with('success', 'Reservation status updated. Confirmation email simulated for ' . $reservation->customer_email . '.');
     }
 

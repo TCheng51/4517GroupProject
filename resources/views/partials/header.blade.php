@@ -7,7 +7,7 @@
             <span class="brand-copy">
                 <p class="brand-kicker">Boardgame Cafe</p>
                 <h1>Fable</h1>
-                <p class="brand-tagline">A storybook tavern for themed rooms, shared tables, and game nights that feel like worlds of their own.</p>
+                <p class="brand-tagline">Themed rooms, curated boardgames, and tavern service for unforgettable game nights.</p>
             </span>
         </a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation" data-no-loading>

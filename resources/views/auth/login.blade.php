@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="shell page">
-    <section class="split-panel">
+    <section class="split-panel auth-panel">
         <div class="form-panel">
             <p class="eyebrow">Member Login</p>
             <h2 class="section-title">Sign in to reserve your next table.</h2>
@@ -35,25 +35,25 @@
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Enter Fable</button>
+                    <p class="auth-switch">New here? <a href="{{ route('register') }}">Create a membership</a></p>
                 </div>
             </form>
         </div>
 
         <aside class="side-panel">
-            <article class="info-box">
+            <div class="auth-note">
                 <p class="story-meta">Before You Reserve</p>
                 <h3>Your membership keeps the evening moving.</h3>
-                <p>Once you sign in, you can choose the room that fits your game and head straight into planning the session.</p>
-            </article>
+                <p>Choose the room that fits your game, review available times, and manage future bookings from one account.</p>
+            </div>
 
-            <article class="info-box">
-                <p class="story-meta">New Here</p>
-                <h3>Create a membership first.</h3>
-                <p>Registration only takes a moment and gives you access to table and room reservations across the cafe.</p>
-            </article>
+            <ul class="auth-benefits" aria-label="Membership benefits">
+                <li>Book themed rooms without re-entering contact details.</li>
+                <li>Return to upcoming reservations when plans change.</li>
+                <li>Keep cafe orders attached to each booking.</li>
+            </ul>
 
             <div class="inline-links">
-                <a href="{{ route('register') }}" class="btn btn-outline">Create Membership</a>
                 <a href="{{ route('index') }}" class="btn btn-outline">Back Home</a>
             </div>
         </aside>
