@@ -3,9 +3,16 @@
 @section('content')
 <div class="shell page">
     <section class="panel">
-        <span class="status-pill success">Membership Created</span>
+        <span class="status-pill success">
+            <i data-lucide="check-circle-2" aria-hidden="true"></i>
+            Membership Created
+        </span>
         <h2 class="section-title">Your place at Fable is ready.</h2>
         <p class="page-intro">You can now sign in, choose a story room, and plan your first tavern session.</p>
+
+        @if(session('email_simulated'))
+            <p class="status-pill success">{{ session('email_simulated') }}</p>
+        @endif
 
         <div class="detail-grid">
             <article class="detail-item">
