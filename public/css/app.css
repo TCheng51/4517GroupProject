@@ -259,6 +259,104 @@ button {
     height: 18px;
 }
 
+/* Lucide icons — sized via parent's currentColor + font-size */
+[data-lucide],
+i[data-lucide] svg {
+    width: 1.25em;
+    height: 1.25em;
+    stroke-width: 1.6;
+    vertical-align: -0.18em;
+}
+
+.feature-icon [data-lucide],
+.feature-icon svg {
+    width: 26px;
+    height: 26px;
+}
+
+.story-icon [data-lucide],
+.story-icon svg,
+.status-icon [data-lucide],
+.status-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.brand-mark [data-lucide],
+.brand-mark svg {
+    width: 32px;
+    height: 32px;
+}
+
+.nav-toggle [data-lucide],
+.nav-toggle svg {
+    width: 22px;
+    height: 22px;
+}
+
+.ambient-orb [data-lucide],
+.ambient-orb svg {
+    width: 38px;
+    height: 38px;
+}
+
+/* Skip link — visible only on keyboard focus */
+.skip-link {
+    position: absolute;
+    left: var(--space-4);
+    top: var(--space-4);
+    z-index: 100;
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-md);
+    background: var(--accent-deep);
+    color: #fff8ef;
+    font-size: var(--text-sm);
+    letter-spacing: 0.08em;
+    transform: translateY(-200%);
+    transition: transform 0.18s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+    transform: translateY(0);
+    outline: 2px solid var(--accent-soft);
+    outline-offset: 2px;
+}
+
+#main:focus {
+    outline: none;
+}
+
+/* Flash messages */
+.flash-message {
+    margin: 0 0 var(--space-5);
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    font-size: var(--text-sm);
+    line-height: 1.5;
+}
+
+.flash-success {
+    background: rgba(79, 122, 80, 0.12);
+    border-color: rgba(79, 122, 80, 0.28);
+    color: var(--success);
+}
+
+.flash-error {
+    background: rgba(159, 65, 55, 0.1);
+    border-color: rgba(159, 65, 55, 0.28);
+    color: var(--danger);
+}
+
+/* Submit-button loading state */
+.btn[disabled],
+.btn[aria-busy="true"] {
+    opacity: 0.72;
+    cursor: wait;
+    pointer-events: none;
+}
+
 .site-main {
     padding: var(--space-8) 0 var(--space-9);
 }

@@ -94,4 +94,38 @@ document.addEventListener("DOMContentLoaded", () => {
         roomSelect.addEventListener("change", updateRoomPreview);
         updateRoomPreview();
     }
+
+    // Render Lucide icons. Lucide ships from CDN with a defer attr,
+    // so it may finish parsing before or after this DOMContentLoaded
+    // handler — handle both orderings.
+    const renderIcons = () => {
+        if (window.lucide && typeof window.lucide.createIcons === "function") {
+            window.lucide.createIcons();
+        }
+    };
+
+    if (window.lucide) {
+        renderIcons();
+    } else {
+        // Lucide hasn't loaded yet — try again after the next tick and on window load.
+        window.addEventListener("load", renderIcons, { once: true });
+    }
+
+    // Submit-button loading state. Disables the primary button on form
+    // submit so users don't double-submit and can see something happened.
+    document.querySelectorAll("form").forEach((form) => {
+        form.addEventListener("submit", () => {
+            const btn = form.querySelector(
+                'button[type="submit"]:not([data-no-loading])'
+            );
+            if (!btn || btn.disabled) return;
+
+            // Stash original label so a future enhancement can restore it.
+            btn.dataset.label = btn.textContent.trim();
+            btn.setAttribute("aria-busy", "true");
+            btn.textContent = "Working…";
+            btn.disabled = true;
+        });
+    });
 });
+
