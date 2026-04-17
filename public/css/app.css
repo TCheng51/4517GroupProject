@@ -252,12 +252,6 @@ button {
     background: rgba(255, 248, 239, 0.86);
 }
 
-.btn-ghost {
-    color: #f8ecd8;
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(235, 196, 139, 0.16);
-}
-
 .btn svg,
 .nav-link svg,
 .nav-cta svg {
@@ -844,45 +838,61 @@ button {
     }
 }
 
-/* Login Status Styling */
+/* Login status (reservation header chip) */
+.login-status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    background: rgba(201, 135, 61, 0.08);
+    border: 1px solid var(--line);
+}
+
 .login-content {
-    margin-bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin: 0;
 }
 
 .login-label {
     margin: 0;
-    font-size: 14px;
-    font-weight: 600;
-    color: #495057;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
 }
 
-.member-info {
-    color: #6c757d;
-    font-style: italic;
-}
-
-.guest-info {
-    color: #6c757d;
-    font-style: italic;
+.login-status .member-info,
+.login-status .guest-info {
+    font-style: normal;
+    font-size: var(--text-sm);
+    color: var(--ink-soft);
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
 }
 
 .logout-form {
     margin: 0;
-    margin-left: 16px;
 }
 
 .btn-logout {
-    background: #dc3545;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+    min-height: 36px;
+    padding: 0 var(--space-4);
+    font-size: var(--text-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: rgba(159, 65, 55, 0.92);
+    color: #fff8ef;
+    border-color: transparent;
 }
 
-.btn-logout:hover {
-    background: #c82333;
+.btn-logout:hover,
+.btn-logout:focus-visible {
+    background: var(--danger);
+    transform: translateY(-1px);
 }
