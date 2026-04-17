@@ -5,7 +5,7 @@
     <section class="split-panel">
         <div class="form-panel">
             <p class="eyebrow">Room Reservations</p>
-            <h2 class="section-title">Reserve a table or private room at Fabel.</h2>
+            <h2 class="section-title">Reserve a table or private room at Fable.</h2>
             <p class="page-intro">Choose a date, session, and story-genre space that fits your boardgame and group size.</p>
 
             <div class="login-status">
@@ -106,7 +106,7 @@
             <article class="table-preview">
                 <span class="preview-badge">Room Preview</span>
                 <h3 data-room-title>Choose a story room</h3>
-                <p data-room-mood>Each space in Fabel is styled around a different genre so your table feels like part of the game.</p>
+                <p data-room-mood>Each space in Fable is styled around a different genre so your table feels like part of the game.</p>
                 <p class="story-meta" data-room-capacity>Capacity will appear here</p>
                 <p data-room-detail>Select a room to preview the atmosphere and the best fit for your session.</p>
             </article>

@@ -4,7 +4,7 @@
 <div class="shell page">
     <section class="panel">
         <span class="status-pill success">Reservation Confirmed</span>
-        <h2 class="section-title">Your table at Fabel has been set.</h2>
+        <h2 class="section-title">Your table at Fable has been set.</h2>
         <p class="page-intro">We are ready to host your group with the room, atmosphere, and service that fits your session.</p>
 
         <div class="detail-grid">
@@ -60,7 +60,7 @@
             </article>
 
             <article class="info-box">
-                <h3>Contact Fabel</h3>
+                <h3>Contact Fable</h3>
                 <p>Email: reservations@fabelcafe.com</p>
                 <p>Phone: (852) 1234 5678</p>
             </article>

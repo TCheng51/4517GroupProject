@@ -4,7 +4,7 @@
 <div class="shell page">
     <section class="panel">
         <p class="eyebrow">Registration Guide</p>
-        <h2 class="section-title">Almost ready to join Fabel.</h2>
+        <h2 class="section-title">Almost ready to join Fable.</h2>
         <p class="page-intro">Finish the membership form, then we will create your account and issue your unique member number for future reservations.</p>
         <div class="cards-grid">
             <article class="info-box">

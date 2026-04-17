@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!theme) {
             previewTitle.textContent = "Choose a story room";
-            previewMood.textContent = "Each space in Fabel is styled around a different genre so your table feels like part of the game.";
+            previewMood.textContent = "Each space in Fable is styled around a different genre so your table feels like part of the game.";
             previewCapacity.textContent = "Capacity will appear here";
             previewDetail.textContent = "Select a room to preview the atmosphere and the best fit for your session.";
             return;
