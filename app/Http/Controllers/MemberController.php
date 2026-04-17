@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\ReservationRequest;
+use App\Http\Requests\UpdateRoomStatusRequest;
 use App\Models\Member;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
 
 class MemberController extends Controller
 {
-    public function index(): \Illuminate\View\View
-    {
-        return view('home');
-    }
-
     public function home(): \Illuminate\View\View
     {
         return view('home');
@@ -37,22 +35,19 @@ class MemberController extends Controller
             'password' => ['required', 'confirmed', Password::min(8)],
         ]);
 
-        // Generate 4-digit member number
-        $memberNumber = str_pad(random_int(1000, 9999), 4, '0', STR_PAD_LEFT);
-
+        // member_number is set by Member's `created` hook; password is hashed by the cast.
         $member = Member::create([
-            'member_number' => $memberNumber,
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
             'address' => $validated['address'],
             'phone' => $validated['phone'],
             'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
+            'password' => $validated['password'],
         ]);
 
         return redirect()->route('register.success')->with([
             'success' => 'Registration successful!',
-            'member' => $member
+            'member' => $member,
         ]);
     }
 
@@ -72,12 +67,9 @@ class MemberController extends Controller
         return view('auth.login');
     }
 
-    public function login(Request $request): \Illuminate\Http\RedirectResponse
+    public function login(LoginRequest $request): \Illuminate\Http\RedirectResponse
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        $credentials = $request->validated();
 
         if (Auth::guard('web')->attempt($credentials)) {
             $request->session()->regenerate();
@@ -101,45 +93,72 @@ class MemberController extends Controller
         return view('reservation-confirm');
     }
 
-    public function makeReservation(Request $request): \Illuminate\Http\RedirectResponse
+    public function makeReservation(ReservationRequest $request): \Illuminate\Http\RedirectResponse
     {
-        $rules = [
-            'reservation_date' => 'required|date|after:today',
-            'time_slot' => 'required|string',
-            'table_room' => 'required|string',
-        ];
+        $validated = $request->validated();
+        $themes = config('rooms.themes');
+        $room = $validated['table_room'];
 
-        // Add validation rules for guest fields if user is not authenticated
-        if (!Auth::check()) {
-            $rules['guest_name'] = 'required|string|max:255';
-            $rules['guest_email'] = 'required|email|max:255';
-            $rules['guest_phone'] = 'required|string|max:20';
+        if (! isset($themes[$room])) {
+            return back()
+                ->withErrors(['table_room' => 'That room is no longer available.'])
+                ->withInput();
         }
 
-        $validated = $request->validate($rules);
+        $capacity = (int) $themes[$room]['capacity'];
 
-        // Prepare reservation data
-        $reservationData = [
-            'member_id' => Auth::id(),
-            'reservation_date' => $validated['reservation_date'],
-            'time_slot' => $validated['time_slot'],
-            'table_room' => $validated['table_room'],
-            'status' => 'pending',
-        ];
+        // Atomic: count + insert must not race with another booking. The unique
+        // index on (member_id, date, time_slot, table_room) prevents members from
+        // double-booking even if this check races; guests rely on the count alone.
+        try {
+            $reservation = DB::transaction(function () use ($validated, $room, $capacity) {
+                $booked = Reservation::query()
+                    ->where('reservation_date', $validated['reservation_date'])
+                    ->where('time_slot', $validated['time_slot'])
+                    ->where('table_room', $room)
+                    ->where('status', '!=', 'cancelled')
+                    ->lockForUpdate()
+                    ->count();
 
-        // Add guest fields if user is not authenticated
-        if (!Auth::check()) {
-            $reservationData['is_guest'] = true;
-            $reservationData['guest_name'] = $validated['guest_name'];
-            $reservationData['guest_email'] = $validated['guest_email'];
-            $reservationData['guest_phone'] = $validated['guest_phone'];
+                if ($booked >= $capacity) {
+                    abort(409, 'slot-full');
+                }
+
+                $isGuest = ! Auth::check();
+
+                return Reservation::create([
+                    'member_id' => Auth::id(),
+                    'reservation_date' => $validated['reservation_date'],
+                    'time_slot' => $validated['time_slot'],
+                    'table_room' => $room,
+                    'status' => 'pending',
+                    'is_guest' => $isGuest,
+                    'guest_name' => $validated['guest_name'] ?? null,
+                    'guest_email' => $validated['guest_email'] ?? null,
+                    'guest_phone' => $validated['guest_phone'] ?? null,
+                ]);
+            });
+        } catch (\Symfony\Component\HttpKernel\Exception\HttpException $e) {
+            if ($e->getMessage() === 'slot-full') {
+                return back()
+                    ->withErrors(['table_room' => 'That room and time slot are fully booked. Please pick another.'])
+                    ->withInput();
+            }
+            throw $e;
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Unique index violation — member already booked this exact slot.
+            if (str_contains($e->getMessage(), 'reservations_member_slot_unique')
+                || str_contains($e->getMessage(), 'UNIQUE constraint failed')) {
+                return back()
+                    ->withErrors(['table_room' => 'You already have a reservation for that room and time.'])
+                    ->withInput();
+            }
+            throw $e;
         }
-
-        $reservation = Reservation::create($reservationData);
 
         return redirect()->route('reservation.success')->with([
             'success' => 'Reservation successful!',
-            'reservation' => $reservation
+            'reservation' => $reservation,
         ]);
     }
 
@@ -156,70 +175,50 @@ class MemberController extends Controller
 
     public function showRoomStatus(): \Illuminate\View\View
     {
-        // Define room themes with their information
-        $roomThemes = [
-            'fantasy-hearth' => [
-                'name' => 'Fantasy Hearth',
-                'capacity' => 4,
-                'description' => 'A cozy medieval tavern setting with warm lighting, wooden tables, and fantasy decor perfect for RPG sessions.'
-            ],
-            'mythic-garden' => [
-                'name' => 'Mythic Garden',
-                'capacity' => 4,
-                'description' => 'An enchanted forest atmosphere with lush greenery, natural elements, and mystical ambiance.'
-            ],
-            'iron-archive' => [
-                'name' => 'Iron Archive',
-                'capacity' => 4,
-                'description' => 'A steampunk library setting with metal accents, gears, and Victorian-inspired decor.'
-            ],
-            'starlight-orbit' => [
-                'name' => 'Starlight Orbit',
-                'capacity' => 6,
-                'description' => 'A futuristic space station theme with cosmic lighting and sci-fi elements.'
-            ],
-            'clockwork-vault' => [
-                'name' => 'Clockwork Vault',
-                'capacity' => 6,
-                'description' => 'A mysterious mechanical chamber with intricate clockwork mechanisms and puzzle-solving atmosphere.'
-            ],
-            'storykeeper-suite' => [
-                'name' => 'Storykeeper Suite',
-                'capacity' => 8,
-                'description' => 'A grand literary salon with bookshelves, comfortable seating, and storytelling ambiance.'
-            ]
-        ];
+        $roomThemes = config('rooms.themes');
+        $timeSlots = config('rooms.time_slots');
 
-        $timeSlots = ['2:00-4:00', '6:00-9:00', '9:00-11:00'];
-
-        // Get today's reservations grouped by room
-        $todayReservations = Reservation::with(['member'])
+        // Single GROUP BY query counts active bookings per (room, slot) for today.
+        // Replaces the previous "load all rows, filter in PHP" pattern.
+        $bookedCounts = Reservation::query()
             ->whereDate('reservation_date', today())
+            ->where('status', '!=', 'cancelled')
+            ->selectRaw('table_room, time_slot, COUNT(*) as booked')
+            ->groupBy('table_room', 'time_slot')
             ->get()
-            ->groupBy('table_room');
+            ->keyBy(fn ($r) => $r->table_room . '|' . $r->time_slot);
 
-        // Calculate room availability
         $roomAvailability = [];
-        foreach ($roomThemes as $roomTheme => $roomInfo) {
-            $roomAvailability[$roomTheme] = [];
+        foreach ($roomThemes as $roomKey => $roomInfo) {
+            $roomAvailability[$roomKey] = [];
             foreach ($timeSlots as $slot) {
-                $reservationsInSlot = $todayReservations->get($roomTheme, collect())
-                    ->where('time_slot', $slot)
-                    ->where('status', '!=', 'cancelled')
-                    ->count();
-                
-                // Calculate available spots based on room capacity
-                $maxCapacity = $roomInfo['capacity'];
-                $roomAvailability[$roomTheme][$slot] = max(0, $maxCapacity - $reservationsInSlot);
+                $booked = (int) ($bookedCounts[$roomKey . '|' . $slot]->booked ?? 0);
+                $roomAvailability[$roomKey][$slot] = max(0, (int) $roomInfo['capacity'] - $booked);
             }
         }
 
-        // Calculate statistics
-        $totalReservations = $todayReservations->flatten()->count();
-        $pendingReservations = $todayReservations->flatten()->where('status', 'pending')->count();
-        $confirmedReservations = $todayReservations->flatten()->where('status', 'confirmed')->count();
-        
-        // Count available rooms (rooms with at least one available slot)
+        // Paginated list of today's reservations for the admin table.
+        $todayReservations = Reservation::with('member')
+            ->whereDate('reservation_date', today())
+            ->orderBy('time_slot')
+            ->orderBy('table_room')
+            ->simplePaginate(50)
+            ->through(fn ($r) => $r);
+
+        // Aggregate status counts in one query instead of collection filtering.
+        $statusCounts = Reservation::query()
+            ->whereDate('reservation_date', today())
+            ->selectRaw("
+                COUNT(*) as total,
+                SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
+                SUM(CASE WHEN status = 'confirmed' THEN 1 ELSE 0 END) as confirmed
+            ")
+            ->first();
+
+        $totalReservations = (int) ($statusCounts->total ?? 0);
+        $pendingReservations = (int) ($statusCounts->pending ?? 0);
+        $confirmedReservations = (int) ($statusCounts->confirmed ?? 0);
+
         $availableRooms = 0;
         foreach ($roomAvailability as $roomSlots) {
             foreach ($roomSlots as $available) {
@@ -242,13 +241,9 @@ class MemberController extends Controller
         ));
     }
 
-    public function updateRoomStatus(Request $request, Reservation $reservation): \Illuminate\Http\RedirectResponse
+    public function updateRoomStatus(UpdateRoomStatusRequest $request, Reservation $reservation): \Illuminate\Http\RedirectResponse
     {
-        $validated = $request->validate([
-            'status' => 'required|in:confirmed,cancelled'
-        ]);
-
-        $reservation->update(['status' => $validated['status']]);
+        $reservation->update(['status' => $request->validated()['status']]);
 
         return redirect()->route('room-status')->with('success', 'Reservation status updated successfully!');
     }

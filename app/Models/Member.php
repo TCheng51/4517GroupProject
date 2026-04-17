@@ -14,11 +14,13 @@ class Member extends Authenticatable
     {
         parent::boot();
 
-        static::creating(function ($member) {
+        // Derive member_number from the row's primary key AFTER insert so the value
+        // is race-free (DB auto-increments `id` atomically). Manual member_number
+        // values set by seeders/controllers are preserved.
+        static::created(function ($member) {
             if (empty($member->member_number)) {
-                $lastMember = Member::orderBy('id', 'desc')->first();
-                $lastNumber = $lastMember ? (int)$lastMember->member_number : 0;
-                $member->member_number = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+                $member->member_number = str_pad((string) $member->id, 4, '0', STR_PAD_LEFT);
+                $member->saveQuietly();
             }
         });
     }
@@ -26,24 +28,26 @@ class Member extends Authenticatable
     protected $fillable = [
         'member_number',
         'first_name',
-        'last_name', 
+        'last_name',
         'email',
         'phone',
         'address',
         'password',
-        'date_of_birth',
-        'gender',
-        'membership_type',
-        'membership_expiry',
-        'is_active',
-        'notes',
-        'profile_picture',
+        'is_admin',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+            'is_admin' => 'boolean',
+        ];
+    }
 
     public function reservations()
     {

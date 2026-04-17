@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'member_id',
@@ -15,19 +16,19 @@ class Reservation extends Model
         'time_slot',
         'table_room',
         'status',
-        'number_of_guests',
-        'total_amount',
-        'payment_status',
-        'special_requests',
-        'notes',
-        'confirmed_at',
-        'cancelled_at',
-        'confirmation_code',
         'guest_name',
         'guest_email',
         'guest_phone',
         'is_guest',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'reservation_date' => 'date',
+            'is_guest' => 'boolean',
+        ];
+    }
 
     public function member()
     {
