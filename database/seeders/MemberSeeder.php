@@ -67,7 +67,7 @@ class MemberSeeder extends Seeder
 
         $this->command->info('Members seeded successfully!');
         $this->command->info('Total members created: ' . count($members));
-        
+
         // Display created members with their member numbers
         $createdMembers = Member::whereIn('email', array_column($members, 'email'))->get();
         $this->command->info("\n=== Created Members ===");

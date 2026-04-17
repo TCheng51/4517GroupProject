@@ -20,10 +20,6 @@
                 <span>Email</span>
                 <strong>{{ $member->email ?? 'example@email.com' }}</strong>
             </article>
-            <article class="detail-item">
-                <span>Next Step</span>
-                <strong>Log in and reserve a table</strong>
-            </article>
         </div>
 
         <div class="navigation-buttons">
