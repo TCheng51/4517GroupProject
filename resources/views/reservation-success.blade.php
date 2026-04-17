@@ -24,6 +24,20 @@
                 <span>Story Room</span>
                 <strong>{{ $reservation->table_room ?? 'N/A' }}</strong>
             </article>
+            @if($reservation->is_guest)
+            <article class="detail-item">
+                <span>Guest Name</span>
+                <strong>{{ $reservation->guest_name ?? 'N/A' }}</strong>
+            </article>
+            <article class="detail-item">
+                <span>Guest Email</span>
+                <strong>{{ $reservation->guest_email ?? 'N/A' }}</strong>
+            </article>
+            <article class="detail-item">
+                <span>Guest Phone</span>
+                <strong>{{ $reservation->guest_phone ?? 'N/A' }}</strong>
+            </article>
+            @endif
         </div>
 
         <div class="cards-grid">
@@ -31,7 +45,11 @@
                 <h3>Before you arrive</h3>
                 <ul class="check-list">
                     <li>Plan to arrive around 10 minutes early.</li>
+                    @if($reservation->is_guest)
+                    <li>Have your reservation confirmation ready for check-in.</li>
+                    @else
                     <li>Have your member details ready for check-in.</li>
+                    @endif
                     <li>Bring the boardgame you booked the room around, or explore the cafe library on site.</li>
                 </ul>
             </article>

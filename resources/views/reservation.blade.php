@@ -4,22 +4,58 @@
 <div class="shell page">
     <section class="split-panel">
         <div class="form-panel">
-            <p class="eyebrow">Reservations</p>
+            <p class="eyebrow">Room Reservations</p>
             <h2 class="section-title">Reserve a table or private room at Fabel.</h2>
             <p class="page-intro">Choose a date, session, and story-genre space that fits your boardgame and group size.</p>
 
             <div class="login-status">
-                <p class="login-label">Login:
+                <div class="login-content">
+                    <p class="login-label">Login: 
+                        @if(Auth::check())
+                            <span class="member-info">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }} ({{ Auth::user()->email }})</span>
+                        @else
+                            <span class="guest-info">Guest</span>
+                        @endif
+                    </p>
                     @if(Auth::check())
-                    <span class="member-info">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }} ({{ Auth::user()->email }})</span>
-                    @else
-                    <span class="guest-info">Guest</span>
+                        <form action="{{ route('logout') }}" method="POST" class="logout-form">
+                            @csrf
+                            <button type="submit" class="btn btn-logout">Logout</button>
+                        </form>
                     @endif
-                </p>
+                </div>
             </div>
 
             <form action="{{ route('reservation.submit') }}" method="post">
                 @csrf
+                @guest
+                <div class="field-grid guest-fields">
+                    <div class="form-group">
+                        <label for="guest_name">Your Name</label>
+                        <input type="text" id="guest_name" name="guest_name" value="{{ old('guest_name') }}" placeholder="Enter your full name">
+                        @error('guest_name')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="guest_email">Email Address</label>
+                        <input type="email" id="guest_email" name="guest_email" value="{{ old('guest_email') }}" placeholder="your@email.com">
+                        @error('guest_email')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="form-group form-span-2">
+                        <label for="guest_phone">Phone Number</label>
+                        <input type="tel" id="guest_phone" name="guest_phone" value="{{ old('guest_phone') }}" placeholder="(852) 1234 5678">
+                        @error('guest_phone')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+                @endguest
+
                 <div class="field-grid">
                     <div class="form-group">
                         <label for="reservation_date">Reservation date</label>

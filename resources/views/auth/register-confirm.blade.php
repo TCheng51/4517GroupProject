@@ -21,11 +21,48 @@
             </article>
             <article class="info-box">
                 <h3>Next step</h3>
-                <p>Return to the membership form to complete sign-up and move into the reservation flow.</p>
+                <p>Review your information below and confirm to create your account.</p>
             </article>
         </div>
+
+        @if(isset($registrationData))
+        <div class="member-confirmation">
+            <h3>Review Your Information</h3>
+            <div class="detail-grid">
+                <article class="detail-item">
+                    <span>First Name</span>
+                    <strong>{{ $registrationData['first_name'] ?? 'N/A' }}</strong>
+                </article>
+                <article class="detail-item">
+                    <span>Last Name</span>
+                    <strong>{{ $registrationData['last_name'] ?? 'N/A' }}</strong>
+                </article>
+                <article class="detail-item">
+                    <span>Email</span>
+                    <strong>{{ $registrationData['email'] ?? 'N/A' }}</strong>
+                </article>
+                <article class="detail-item">
+                    <span>Phone</span>
+                    <strong>{{ $registrationData['phone'] ?? 'N/A' }}</strong>
+                </article>
+                <article class="detail-item form-span-2">
+                    <span>Address</span>
+                    <strong>{{ $registrationData['address'] ?? 'N/A' }}</strong>
+                </article>
+            </div>
+
+            <form action="{{ route('register.confirm.submit') }}" method="post" class="confirmation-form">
+                @csrf
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Confirm & Create Account</button>
+                    <a href="{{ route('register') }}" class="btn btn-secondary">Edit Information</a>
+                </div>
+            </form>
+        </div>
+        @endif
+
         <div class="navigation-buttons">
-            <a href="{{ route('register') }}" class="btn btn-primary">Open Registration Form</a>
+            <a href="{{ route('register') }}" class="btn btn-outline">Back to Registration</a>
             <a href="{{ route('index') }}" class="btn btn-outline">Back Home</a>
         </div>
     </section>

@@ -4,7 +4,7 @@
 <div class="shell page">
     <section class="split-panel">
         <div class="form-panel">
-            <p class="eyebrow">Membership</p>
+            <p class="eyebrow">Membership Registration</p>
             <h2 class="section-title">Join Fabel and start reserving story-led tables.</h2>
             <p class="page-intro">Create your member account to unlock reservations, smoother check-in, and a regular place at the tavern.</p>
 
@@ -15,7 +15,7 @@
                         <label for="last_name">Last name</label>
                         <input type="text" id="last_name" name="last_name" required placeholder="Chan" value="{{ old('last_name') }}">
                         @error('last_name')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
@@ -23,7 +23,7 @@
                         <label for="first_name">First name</label>
                         <input type="text" id="first_name" name="first_name" required placeholder="Alex" value="{{ old('first_name') }}">
                         @error('first_name')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
@@ -31,7 +31,7 @@
                         <label for="address">Mailing address</label>
                         <input type="text" id="address" name="address" required placeholder="Flat, building, street, district" value="{{ old('address') }}">
                         @error('address')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
@@ -39,7 +39,7 @@
                         <label for="phone">Contact phone</label>
                         <input type="tel" id="phone" name="phone" required placeholder="12345678" value="{{ old('phone') }}">
                         @error('phone')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
@@ -47,7 +47,7 @@
                         <label for="email">Email address</label>
                         <input type="email" id="email" name="email" required placeholder="your@email.com" value="{{ old('email') }}">
                         @error('email')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
@@ -56,7 +56,7 @@
                         <input type="password" id="password" name="password" required placeholder="Choose a secure password" minlength="8">
                         <small class="form-hint">Use at least 8 characters.</small>
                         @error('password')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
@@ -64,7 +64,7 @@
                         <label for="password_confirmation">Confirm password</label>
                         <input type="password" id="password_confirmation" name="password_confirmation" required placeholder="Repeat your password">
                         @error('password_confirmation')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>

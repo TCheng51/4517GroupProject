@@ -1,9 +1,5 @@
 /* Login Status Styling */
-.login-status {
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    padding: 12px 16px;
+.login-content {
     margin-bottom: 20px;
 }
 
@@ -22,4 +18,25 @@
 .guest-info {
     color: #6c757d;
     font-style: italic;
+}
+
+.logout-form {
+    margin: 0;
+    margin-left: 16px;
+}
+
+.btn-logout {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-logout:hover {
+    background: #c82333;
 }

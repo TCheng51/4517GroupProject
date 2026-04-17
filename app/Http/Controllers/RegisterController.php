@@ -14,7 +14,7 @@ class RegisterController extends Controller
     /**
      * Show the registration form
      */
-    public function showRegistrationForm()
+    public function showRegistrationForm(): \Illuminate\View\View
     {
         return view('auth.register');
     }
@@ -22,19 +22,21 @@ class RegisterController extends Controller
     /**
      * Show the registration confirmation page
      */
-    public function showConfirmationForm()
+    public function showConfirmationForm(): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
     {
         if (!Session::has('registration_data')) {
             return redirect()->route('register');
         }
 
-        return view('auth.register-confirm');
+        $registrationData = Session::get('registration_data');
+
+        return view('auth.register-confirm', compact('registrationData'));
     }
 
     /**
      * Process registration form and show confirmation
      */
-    public function processRegistration(Request $request)
+    public function processRegistration(Request $request): \Illuminate\Http\RedirectResponse
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
@@ -60,7 +62,7 @@ class RegisterController extends Controller
     /**
      * Confirm and complete registration
      */
-    public function confirmRegistration(Request $request)
+    public function confirmRegistration(Request $request): \Illuminate\Http\RedirectResponse
     {
         if (!Session::has('registration_data')) {
             return redirect()->route('register');
@@ -105,14 +107,14 @@ class RegisterController extends Controller
     /**
      * Show the registration success page
      */
-    public function showSuccessPage()
+    public function showSuccessPage(): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
     {
         if (!Session::has('member_info')) {
             return redirect()->route('login');
         }
 
         $memberInfo = Session::get('member_info');
-        
+
         // Create a member object for the view
         $member = (object) $memberInfo;
 
@@ -122,7 +124,7 @@ class RegisterController extends Controller
     /**
      * Handle AJAX registration (for API usage)
      */
-    public function ajaxRegister(Request $request)
+    public function ajaxRegister(Request $request): \Illuminate\Http\JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
@@ -175,7 +177,7 @@ class RegisterController extends Controller
     /**
      * Check if email is available (for real-time validation)
      */
-    public function checkEmailAvailability(Request $request)
+    public function checkEmailAvailability(Request $request): \Illuminate\Http\JsonResponse
     {
         $email = $request->input('email');
         $exists = Member::where('email', $email)->exists();
@@ -189,7 +191,7 @@ class RegisterController extends Controller
     /**
      * Validate registration form (for real-time validation)
      */
-    public function validateRegistration(Request $request)
+    public function validateRegistration(Request $request): \Illuminate\Http\JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',

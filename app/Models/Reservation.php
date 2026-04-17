@@ -23,10 +23,63 @@ class Reservation extends Model
         'confirmed_at',
         'cancelled_at',
         'confirmation_code',
+        'guest_name',
+        'guest_email',
+        'guest_phone',
+        'is_guest',
     ];
 
     public function member()
     {
         return $this->belongsTo(Member::class);
+    }
+
+    /**
+     * Get the customer name (guest name or member full name)
+     */
+    public function getCustomerNameAttribute(): string
+    {
+        if ($this->is_guest) {
+            return $this->guest_name ?? 'Guest';
+        }
+        return $this->member ? $this->member->first_name . ' ' . $this->member->last_name : 'Unknown';
+    }
+
+    /**
+     * Get the customer email (guest email or member email)
+     */
+    public function getCustomerEmailAttribute(): ?string
+    {
+        if ($this->is_guest) {
+            return $this->guest_email;
+        }
+        return $this->member?->email;
+    }
+
+    /**
+     * Get the customer phone (guest phone or member phone)
+     */
+    public function getCustomerPhoneAttribute(): ?string
+    {
+        if ($this->is_guest) {
+            return $this->guest_phone;
+        }
+        return $this->member?->phone;
+    }
+
+    /**
+     * Scope for guest reservations
+     */
+    public function scopeGuests($query)
+    {
+        return $query->where('is_guest', true);
+    }
+
+    /**
+     * Scope for member reservations
+     */
+    public function scopeMembers($query)
+    {
+        return $query->where('is_guest', false)->orWhereNull('is_guest');
     }
 }

@@ -11,22 +11,22 @@ use Illuminate\Validation\Rules\Password;
 
 class MemberController extends Controller
 {
-    public function index()
+    public function index(): \Illuminate\View\View
     {
         return view('home');
     }
 
-    public function home()
+    public function home(): \Illuminate\View\View
     {
         return view('home');
     }
 
-    public function create()
+    public function create(): \Illuminate\View\View
     {
         return view('auth.register');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
@@ -56,23 +56,23 @@ class MemberController extends Controller
         ]);
     }
 
-    public function confirmRegistration()
+    public function confirmRegistration(): \Illuminate\View\View
     {
         return view('auth.register-confirm');
     }
 
-    public function registerSuccess()
+    public function registerSuccess(): \Illuminate\View\View
     {
         $member = session('member');
         return view('auth.register-success', compact('member'));
     }
 
-    public function showLoginForm()
+    public function showLoginForm(): \Illuminate\View\View
     {
         return view('auth.login');
     }
 
-    public function login(Request $request)
+    public function login(Request $request): \Illuminate\Http\RedirectResponse
     {
         $credentials = $request->validate([
             'email' => 'required|email',
@@ -89,31 +89,53 @@ class MemberController extends Controller
         ])->onlyInput('email');
     }
 
-    public function showReservation()
+    public function showReservation(): \Illuminate\View\View
     {
-        return view('reservation');
+        return view('reservation', [
+            'isAuthenticated' => Auth::check(),
+        ]);
     }
 
-    public function confirmReservation()
+    public function confirmReservation(): \Illuminate\View\View
     {
         return view('reservation-confirm');
     }
 
-    public function makeReservation(Request $request)
+    public function makeReservation(Request $request): \Illuminate\Http\RedirectResponse
     {
-        $validated = $request->validate([
+        $rules = [
             'reservation_date' => 'required|date|after:today',
             'time_slot' => 'required|string',
             'table_room' => 'required|string',
-        ]);
+        ];
 
-        $reservation = Reservation::create([
+        // Add validation rules for guest fields if user is not authenticated
+        if (!Auth::check()) {
+            $rules['guest_name'] = 'required|string|max:255';
+            $rules['guest_email'] = 'required|email|max:255';
+            $rules['guest_phone'] = 'required|string|max:20';
+        }
+
+        $validated = $request->validate($rules);
+
+        // Prepare reservation data
+        $reservationData = [
             'member_id' => Auth::id(),
             'reservation_date' => $validated['reservation_date'],
             'time_slot' => $validated['time_slot'],
             'table_room' => $validated['table_room'],
             'status' => 'pending',
-        ]);
+        ];
+
+        // Add guest fields if user is not authenticated
+        if (!Auth::check()) {
+            $reservationData['is_guest'] = true;
+            $reservationData['guest_name'] = $validated['guest_name'];
+            $reservationData['guest_email'] = $validated['guest_email'];
+            $reservationData['guest_phone'] = $validated['guest_phone'];
+        }
+
+        $reservation = Reservation::create($reservationData);
 
         return redirect()->route('reservation.success')->with([
             'success' => 'Reservation successful!',
@@ -121,18 +143,18 @@ class MemberController extends Controller
         ]);
     }
 
-    public function reservationSuccess()
+    public function reservationSuccess(): \Illuminate\View\View
     {
         $reservation = session('reservation');
         return view('reservation-success', compact('reservation'));
     }
 
-    public function showMenu()
+    public function showMenu(): \Illuminate\View\View
     {
         return view('menu');
     }
 
-    public function showRoomStatus()
+    public function showRoomStatus(): \Illuminate\View\View
     {
         // Define room themes with their information
         $roomThemes = [
@@ -171,7 +193,7 @@ class MemberController extends Controller
         $timeSlots = ['2:00-4:00', '6:00-9:00', '9:00-11:00'];
 
         // Get today's reservations grouped by room
-        $todayReservations = Reservation::with('member')
+        $todayReservations = Reservation::with(['member'])
             ->whereDate('reservation_date', today())
             ->get()
             ->groupBy('table_room');
@@ -220,7 +242,7 @@ class MemberController extends Controller
         ));
     }
 
-    public function updateRoomStatus(Request $request, Reservation $reservation)
+    public function updateRoomStatus(Request $request, Reservation $reservation): \Illuminate\Http\RedirectResponse
     {
         $validated = $request->validate([
             'status' => 'required|in:confirmed,cancelled'
@@ -231,12 +253,12 @@ class MemberController extends Controller
         return redirect()->route('room-status')->with('success', 'Reservation status updated successfully!');
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request): \Illuminate\Http\RedirectResponse
     {
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return redirect()->route('home');
     }
 }
