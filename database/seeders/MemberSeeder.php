@@ -72,7 +72,10 @@ class MemberSeeder extends Seeder
         DB::transaction(function () use ($members) {
             foreach ($members as $member) {
                 // The Member model's 'hashed' cast hashes the password on insert.
-                Member::create($member);
+                Member::updateOrCreate(
+                    ['email' => $member['email']],
+                    $member
+                );
             }
         });
 

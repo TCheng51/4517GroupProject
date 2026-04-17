@@ -17,6 +17,9 @@ class DatabaseSeeder extends Seeder
     {
         // Seed members for registration testing
         $this->call([
+            RoomSeeder::class,
+            TimeSlotSeeder::class,
+            MenuItemSeeder::class,
             MemberSeeder::class,
             ReservationSeeder::class,
         ]);

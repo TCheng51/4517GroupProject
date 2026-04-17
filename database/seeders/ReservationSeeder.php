@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Member;
 use App\Models\Reservation;
+use App\Models\Room;
+use App\Models\TimeSlot;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -18,8 +20,13 @@ class ReservationSeeder extends Seeder
             return;
         }
 
-        $roomThemes = array_keys(config('rooms.themes'));
-        $timeSlots = config('rooms.time_slots');
+        $rooms = Room::active()->orderBy('sort_order')->get();
+        $timeSlots = TimeSlot::active()->orderBy('sort_order')->get();
+
+        if ($rooms->isEmpty() || $timeSlots->isEmpty()) {
+            $this->command->warn('No rooms or time slots found. Please run RoomSeeder and TimeSlotSeeder first.');
+            return;
+        }
 
         // Mix past, today, and future so admin dashboard has variety.
         // Each row uses a distinct member/room/slot/date combo to respect the
@@ -37,14 +44,25 @@ class ReservationSeeder extends Seeder
             ['offset' => -3, 'slot' => 1, 'room' => 3, 'status' => 'confirmed'],
         ];
 
-        DB::transaction(function () use ($plan, $members, $roomThemes, $timeSlots) {
+        DB::transaction(function () use ($plan, $members, $rooms, $timeSlots) {
             foreach ($plan as $i => $entry) {
-                Reservation::create([
-                    'member_id' => $members[$i % $members->count()]->id,
-                    'reservation_date' => now()->addDays($entry['offset'])->format('Y-m-d'),
-                    'time_slot' => $timeSlots[$entry['slot']],
-                    'table_room' => $roomThemes[$entry['room']],
+                $member = $members[$i % $members->count()];
+                $room = $rooms[$entry['room']];
+                $timeSlot = $timeSlots[$entry['slot']];
+                $date = now()->addDays($entry['offset'])->format('Y-m-d');
+
+                Reservation::updateOrCreate([
+                    'member_id' => $member->id,
+                    'reservation_date' => $date,
+                    'room_id' => $room->id,
+                    'time_slot_id' => $timeSlot->id,
+                ], [
+                    'time_slot' => $timeSlot->label,
+                    'table_room' => $room->slug,
                     'status' => $entry['status'],
+                    'confirmation_code' => 'FBSEED' . str_pad((string) ($i + 1), 4, '0', STR_PAD_LEFT),
+                    'confirmed_at' => $entry['status'] === 'confirmed' ? now() : null,
+                    'cancelled_at' => $entry['status'] === 'cancelled' ? now() : null,
                 ]);
             }
         });

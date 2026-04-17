@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CheckEmailRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Mail\RegistrationConfirmationMail;
 use App\Models\Member;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 class RegisterController extends Controller
@@ -67,6 +69,9 @@ class RegisterController extends Controller
                 'last_name' => $member->last_name,
                 'email' => $member->email,
             ]);
+            Session::flash('email_simulated', 'Membership confirmation email simulated for ' . $member->email . '.');
+
+            Mail::to($member->email)->send(new RegistrationConfirmationMail($member));
 
             return redirect()->route('register.success');
         } catch (\Throwable $e) {
@@ -94,10 +99,11 @@ class RegisterController extends Controller
         try {
             // Password hashed by the Member model's cast.
             $member = Member::create($request->safe()->except(['password_confirmation']));
+            Mail::to($member->email)->send(new RegistrationConfirmationMail($member));
 
             return response()->json([
                 'success' => true,
-                'message' => 'Registration successful!',
+                'message' => 'Registration successful! Confirmation email simulated.',
                 'member' => [
                     'id' => $member->id,
                     'member_number' => $member->member_number,

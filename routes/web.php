@@ -47,6 +47,16 @@ Route::post('/reservation', [MemberController::class, 'makeReservation'])
     ->middleware('throttle:10,1')
     ->name('reservation.submit');
 Route::get('/reservation/success', [MemberController::class, 'reservationSuccess'])->name('reservation.success');
+Route::get('/api/reservation-availability', [MemberController::class, 'availability'])
+    ->middleware('throttle:30,1')
+    ->name('reservation.availability');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/my-reservations', [MemberController::class, 'myReservations'])->name('my-reservations');
+    Route::get('/my-reservations/{reservation}/edit', [MemberController::class, 'editReservation'])->name('my-reservations.edit');
+    Route::patch('/my-reservations/{reservation}', [MemberController::class, 'updateReservation'])->name('my-reservations.update');
+    Route::post('/my-reservations/{reservation}/cancel', [MemberController::class, 'cancelReservation'])->name('my-reservations.cancel');
+});
 
 Route::post('/logout', [MemberController::class, 'logout'])
     ->middleware('auth')
