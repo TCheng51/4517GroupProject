@@ -13,58 +13,73 @@
                 <div class="field-grid">
                     <div class="form-group">
                         <label for="last_name">Last name</label>
-                        <input type="text" id="last_name" name="last_name" required placeholder="Chan" value="{{ old('last_name') }}">
+                        <input type="text" id="last_name" name="last_name" required placeholder="Chan"
+                               value="{{ old('last_name') }}" autocomplete="family-name"
+                               @error('last_name') aria-invalid="true" aria-describedby="last_name-error" @enderror>
                         @error('last_name')
-                        <small class="text-danger">{{ $message }}</small>
+                            <small id="last_name-error" class="text-danger" role="alert">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="form-group">
                         <label for="first_name">First name</label>
-                        <input type="text" id="first_name" name="first_name" required placeholder="Alex" value="{{ old('first_name') }}">
+                        <input type="text" id="first_name" name="first_name" required placeholder="Alex"
+                               value="{{ old('first_name') }}" autocomplete="given-name"
+                               @error('first_name') aria-invalid="true" aria-describedby="first_name-error" @enderror>
                         @error('first_name')
-                        <small class="text-danger">{{ $message }}</small>
+                            <small id="first_name-error" class="text-danger" role="alert">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="form-group form-span-2">
                         <label for="address">Mailing address</label>
-                        <input type="text" id="address" name="address" required placeholder="Flat, building, street, district" value="{{ old('address') }}">
+                        <input type="text" id="address" name="address" required placeholder="Flat, building, street, district"
+                               value="{{ old('address') }}" autocomplete="street-address"
+                               @error('address') aria-invalid="true" aria-describedby="address-error" @enderror>
                         @error('address')
-                        <small class="text-danger">{{ $message }}</small>
+                            <small id="address-error" class="text-danger" role="alert">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="form-group">
                         <label for="phone">Contact phone</label>
-                        <input type="tel" id="phone" name="phone" required placeholder="12345678" value="{{ old('phone') }}">
+                        <input type="tel" id="phone" name="phone" required placeholder="12345678"
+                               value="{{ old('phone') }}" autocomplete="tel" inputmode="tel"
+                               @error('phone') aria-invalid="true" aria-describedby="phone-error" @enderror>
                         @error('phone')
-                        <small class="text-danger">{{ $message }}</small>
+                            <small id="phone-error" class="text-danger" role="alert">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="form-group">
                         <label for="email">Email address</label>
-                        <input type="email" id="email" name="email" required placeholder="your@email.com" value="{{ old('email') }}">
+                        <input type="email" id="email" name="email" required placeholder="your@email.com"
+                               value="{{ old('email') }}" autocomplete="email"
+                               @error('email') aria-invalid="true" aria-describedby="email-error" @enderror>
                         @error('email')
-                        <small class="text-danger">{{ $message }}</small>
+                            <small id="email-error" class="text-danger" role="alert">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required placeholder="Choose a secure password" minlength="8">
-                        <small class="form-hint">Use at least 8 characters.</small>
+                        <input type="password" id="password" name="password" required placeholder="Choose a secure password"
+                               minlength="8" autocomplete="new-password"
+                               aria-describedby="password-hint @error('password') password-error @enderror"
+                               @error('password') aria-invalid="true" @enderror>
+                        <small id="password-hint" class="form-hint">Use at least 8 characters.</small>
                         @error('password')
-                        <small class="text-danger">{{ $message }}</small>
+                            <small id="password-error" class="text-danger" role="alert">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="form-group">
                         <label for="password_confirmation">Confirm password</label>
-                        <input type="password" id="password_confirmation" name="password_confirmation" required placeholder="Repeat your password">
+                        <input type="password" id="password_confirmation" name="password_confirmation" required placeholder="Repeat your password"
+                               minlength="8" autocomplete="new-password"
+                               @error('password_confirmation') aria-invalid="true" aria-describedby="password_confirmation-error" @enderror>
                         @error('password_confirmation')
-                        <small class="text-danger">{{ $message }}</small>
+                            <small id="password_confirmation-error" class="text-danger" role="alert">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>

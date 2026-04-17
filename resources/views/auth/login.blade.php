@@ -13,17 +13,22 @@
                 <div class="field-grid">
                     <div class="form-group form-span-2">
                         <label for="email">Email address</label>
-                        <input type="email" id="email" name="email" required placeholder="your@email.com" value="{{ old('email') }}">
+                        <input type="email" id="email" name="email" required placeholder="your@email.com"
+                               value="{{ old('email') }}"
+                               autocomplete="email"
+                               @error('email') aria-invalid="true" aria-describedby="email-error" @enderror>
                         @error('email')
-                            <small class="text-danger">{{ $message }}</small>
+                            <small id="email-error" class="text-danger" role="alert">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="form-group form-span-2">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required placeholder="Enter your password">
+                        <input type="password" id="password" name="password" required placeholder="Enter your password"
+                               autocomplete="current-password"
+                               @error('password') aria-invalid="true" aria-describedby="password-error" @enderror>
                         @error('password')
-                            <small class="text-danger">{{ $message }}</small>
+                            <small id="password-error" class="text-danger" role="alert">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>

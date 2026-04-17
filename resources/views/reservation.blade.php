@@ -26,31 +26,40 @@
                 </div>
             </div>
 
-            <form action="{{ route('reservation.submit') }}" method="post">
+            <form action="{{ route('reservation.submit') }}" method="post" data-reservation-form data-availability-url="{{ route('reservation.availability') }}">
                 @csrf
                 @guest
                 <div class="field-grid guest-fields">
                     <div class="form-group">
                         <label for="guest_name">Your Name</label>
-                        <input type="text" id="guest_name" name="guest_name" value="{{ old('guest_name') }}" placeholder="Enter your full name">
+                        <input type="text" id="guest_name" name="guest_name" required
+                               value="{{ old('guest_name') }}" placeholder="Enter your full name"
+                               autocomplete="name"
+                               @error('guest_name') aria-invalid="true" aria-describedby="guest_name-error" @enderror>
                         @error('guest_name')
-                        <small class="text-danger">{{ $message }}</small>
+                            <small id="guest_name-error" class="text-danger" role="alert">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="form-group">
                         <label for="guest_email">Email Address</label>
-                        <input type="email" id="guest_email" name="guest_email" value="{{ old('guest_email') }}" placeholder="your@email.com">
+                        <input type="email" id="guest_email" name="guest_email" required
+                               value="{{ old('guest_email') }}" placeholder="your@email.com"
+                               autocomplete="email"
+                               @error('guest_email') aria-invalid="true" aria-describedby="guest_email-error" @enderror>
                         @error('guest_email')
-                        <small class="text-danger">{{ $message }}</small>
+                            <small id="guest_email-error" class="text-danger" role="alert">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="form-group form-span-2">
                         <label for="guest_phone">Phone Number</label>
-                        <input type="tel" id="guest_phone" name="guest_phone" value="{{ old('guest_phone') }}" placeholder="(852) 1234 5678">
+                        <input type="tel" id="guest_phone" name="guest_phone" required
+                               value="{{ old('guest_phone') }}" placeholder="(852) 1234 5678"
+                               autocomplete="tel" inputmode="tel"
+                               @error('guest_phone') aria-invalid="true" aria-describedby="guest_phone-error" @enderror>
                         @error('guest_phone')
-                        <small class="text-danger">{{ $message }}</small>
+                            <small id="guest_phone-error" class="text-danger" role="alert">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -59,41 +68,86 @@
                 <div class="field-grid">
                     <div class="form-group">
                         <label for="reservation_date">Reservation date</label>
-                        <input type="date" id="reservation_date" name="reservation_date" data-reservation-date required value="{{ old('reservation_date') }}">
+                        <input type="date" id="reservation_date" name="reservation_date" data-reservation-date required
+                               value="{{ old('reservation_date') }}"
+                               @error('reservation_date') aria-invalid="true" aria-describedby="reservation_date-error" @enderror>
                         @error('reservation_date')
-                        <small class="text-danger">{{ $message }}</small>
+                            <small id="reservation_date-error" class="text-danger" role="alert">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="form-group">
                         <label for="time_slot">Time slot</label>
-                        <select id="time_slot" name="time_slot" required>
+                        <select id="time_slot" name="time_slot" required
+                                @error('time_slot') aria-invalid="true" aria-describedby="time_slot-error" @enderror>
                             <option value="">Select a time slot</option>
-                            <option value="2:00-4:00" {{ old('time_slot') == '2:00-4:00' ? 'selected' : '' }}>2:00 PM to 4:00 PM</option>
-                            <option value="6:00-9:00" {{ old('time_slot') == '6:00-9:00' ? 'selected' : '' }}>6:00 PM to 9:00 PM</option>
-                            <option value="9:00-11:00" {{ old('time_slot') == '9:00-11:00' ? 'selected' : '' }}>9:00 PM to 11:00 PM</option>
+                            @foreach($timeSlots as $timeSlot)
+                                <option value="{{ $timeSlot->label }}" {{ old('time_slot') == $timeSlot->label ? 'selected' : '' }}>
+                                    {{ $timeSlot->label }}
+                                </option>
+                            @endforeach
                         </select>
                         @error('time_slot')
-                        <small class="text-danger">{{ $message }}</small>
+                            <small id="time_slot-error" class="text-danger" role="alert">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="form-group form-span-2">
                         <label for="table_room">Table or room theme</label>
-                        <select id="table_room" name="table_room" data-room-select required>
+                        <select id="table_room" name="table_room" data-room-select required
+                                @error('table_room') aria-invalid="true" aria-describedby="table_room-error" @enderror>
                             <option value="">Choose a story room</option>
-                            <option value="fantasy-hearth" {{ old('table_room') == 'fantasy-hearth' ? 'selected' : '' }}>Fantasy Hearth — 4 players</option>
-                            <option value="mythic-garden" {{ old('table_room') == 'mythic-garden' ? 'selected' : '' }}>Mythic Garden — 4 players</option>
-                            <option value="iron-archive" {{ old('table_room') == 'iron-archive' ? 'selected' : '' }}>Iron Archive — 4 players</option>
-                            <option value="starlight-orbit" {{ old('table_room') == 'starlight-orbit' ? 'selected' : '' }}>Starlight Orbit — 6 players</option>
-                            <option value="clockwork-vault" {{ old('table_room') == 'clockwork-vault' ? 'selected' : '' }}>Clockwork Vault — 6 players</option>
-                            <option value="storykeeper-suite" {{ old('table_room') == 'storykeeper-suite' ? 'selected' : '' }}>Storykeeper Suite — 8 players</option>
+                            @foreach($rooms as $room)
+                                <option
+                                    value="{{ $room->slug }}"
+                                    data-name="{{ $room->name }}"
+                                    data-capacity="{{ $room->capacity }}"
+                                    data-description="{{ $room->description }}"
+                                    {{ old('table_room') == $room->slug ? 'selected' : '' }}
+                                >
+                                    {{ $room->name }} — {{ $room->capacity }} players
+                                </option>
+                            @endforeach
                         </select>
                         @error('table_room')
-                        <small class="text-danger">{{ $message }}</small>
+                            <small id="table_room-error" class="text-danger" role="alert">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
+
+                <p class="availability-message" data-availability-message>Choose a date, time slot, and room to check availability.</p>
+
+                @if($menuItemsByCategory->isNotEmpty())
+                <section class="menu-order">
+                    <p class="eyebrow">Pre-order Menu</p>
+                    <h3>Add cafe items to your reservation.</h3>
+                    <p class="form-hint">Quantities are optional. Staff will prepare your order estimate for arrival.</p>
+
+                    @foreach($menuItemsByCategory as $category => $items)
+                        <div class="menu-order-group">
+                            <h4>{{ $category }}</h4>
+                            <div class="menu-order-grid">
+                                @foreach($items as $item)
+                                    <label class="menu-order-item" for="menu_item_{{ $item->id }}">
+                                        <span>
+                                            <strong>{{ $item->name }}</strong>
+                                            <small>HK$ {{ number_format((float) $item->price, 2) }}</small>
+                                        </span>
+                                        <input
+                                            type="number"
+                                            id="menu_item_{{ $item->id }}"
+                                            name="menu_items[{{ $item->id }}]"
+                                            min="0"
+                                            max="9"
+                                            value="{{ old('menu_items.' . $item->id, 0) }}"
+                                        >
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+                </section>
+                @endif
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Confirm Reservation</button>
