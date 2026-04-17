@@ -5,7 +5,11 @@
     <section class="split-panel">
         <div class="form-panel">
             <p class="eyebrow">Membership Registration</p>
+<<<<<<< HEAD
             <h2 class="section-title">Join Fabel and start reserving story-led tables.</h2>
+=======
+            <h2 class="section-title">Join Fable and start reserving story-led tables.</h2>
+>>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
             <p class="page-intro">Create your member account to unlock reservations, smoother check-in, and a regular place at the tavern.</p>
 
             <form action="{{ route('register.store') }}" method="post">
@@ -13,65 +17,131 @@
                 <div class="field-grid">
                     <div class="form-group">
                         <label for="last_name">Last name</label>
+<<<<<<< HEAD
                         <input type="text" id="last_name" name="last_name" required placeholder="Chan" value="{{ old('last_name') }}">
                         @error('last_name')
                         <small class="text-danger">{{ $message }}</small>
+=======
+                        <input type="text" id="last_name" name="last_name" required placeholder="Chan"
+                               value="{{ old('last_name') }}" autocomplete="family-name"
+                               @error('last_name') aria-invalid="true" aria-describedby="last_name-error" @enderror>
+                        @error('last_name')
+                            <small id="last_name-error" class="text-danger" role="alert">{{ $message }}</small>
+>>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
                         @enderror
                     </div>
 
                     <div class="form-group">
                         <label for="first_name">First name</label>
+<<<<<<< HEAD
                         <input type="text" id="first_name" name="first_name" required placeholder="Alex" value="{{ old('first_name') }}">
                         @error('first_name')
                         <small class="text-danger">{{ $message }}</small>
+=======
+                        <input type="text" id="first_name" name="first_name" required placeholder="Alex"
+                               value="{{ old('first_name') }}" autocomplete="given-name"
+                               @error('first_name') aria-invalid="true" aria-describedby="first_name-error" @enderror>
+                        @error('first_name')
+                            <small id="first_name-error" class="text-danger" role="alert">{{ $message }}</small>
+>>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
                         @enderror
                     </div>
 
                     <div class="form-group form-span-2">
                         <label for="address">Mailing address</label>
+<<<<<<< HEAD
                         <input type="text" id="address" name="address" required placeholder="Flat, building, street, district" value="{{ old('address') }}">
                         @error('address')
                         <small class="text-danger">{{ $message }}</small>
+=======
+                        <input type="text" id="address" name="address" required placeholder="Flat, building, street, district"
+                               value="{{ old('address') }}" autocomplete="street-address"
+                               @error('address') aria-invalid="true" aria-describedby="address-error" @enderror>
+                        @error('address')
+                            <small id="address-error" class="text-danger" role="alert">{{ $message }}</small>
+>>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
                         @enderror
                     </div>
 
                     <div class="form-group">
                         <label for="phone">Contact phone</label>
+<<<<<<< HEAD
                         <input type="tel" id="phone" name="phone" required placeholder="12345678" value="{{ old('phone') }}">
                         @error('phone')
                         <small class="text-danger">{{ $message }}</small>
+=======
+                        <input type="tel" id="phone" name="phone" required placeholder="12345678"
+                               value="{{ old('phone') }}" autocomplete="tel" inputmode="tel"
+                               @error('phone') aria-invalid="true" aria-describedby="phone-error" @enderror>
+                        @error('phone')
+                            <small id="phone-error" class="text-danger" role="alert">{{ $message }}</small>
+>>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
                         @enderror
                     </div>
 
                     <div class="form-group">
                         <label for="email">Email address</label>
+<<<<<<< HEAD
                         <input type="email" id="email" name="email" required placeholder="your@email.com" value="{{ old('email') }}">
                         @error('email')
                         <small class="text-danger">{{ $message }}</small>
+=======
+                        <input type="email" id="email" name="email" required placeholder="your@email.com"
+                               value="{{ old('email') }}" autocomplete="email"
+                               @error('email') aria-invalid="true" aria-describedby="email-error" @enderror>
+                        @error('email')
+                            <small id="email-error" class="text-danger" role="alert">{{ $message }}</small>
+>>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
                         @enderror
                     </div>
 
                     <div class="form-group">
                         <label for="password">Password</label>
+<<<<<<< HEAD
                         <input type="password" id="password" name="password" required placeholder="Choose a secure password" minlength="8">
                         <small class="form-hint">Use at least 8 characters.</small>
                         @error('password')
                         <small class="text-danger">{{ $message }}</small>
+=======
+                        <input type="password" id="password" name="password" required placeholder="Choose a secure password"
+                               minlength="8" autocomplete="new-password"
+                               aria-describedby="password-hint @error('password') password-error @enderror"
+                               @error('password') aria-invalid="true" @enderror>
+                        <small id="password-hint" class="form-hint">Use at least 8 characters.</small>
+                        @error('password')
+                            <small id="password-error" class="text-danger" role="alert">{{ $message }}</small>
+>>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
                         @enderror
                     </div>
 
                     <div class="form-group">
                         <label for="password_confirmation">Confirm password</label>
+<<<<<<< HEAD
                         <input type="password" id="password_confirmation" name="password_confirmation" required placeholder="Repeat your password">
                         @error('password_confirmation')
                         <small class="text-danger">{{ $message }}</small>
+=======
+                        <input type="password" id="password_confirmation" name="password_confirmation" required placeholder="Repeat your password"
+                               minlength="8" autocomplete="new-password"
+                               @error('password_confirmation') aria-invalid="true" aria-describedby="password_confirmation-error" @enderror>
+                        @error('password_confirmation')
+                            <small id="password_confirmation-error" class="text-danger" role="alert">{{ $message }}</small>
+>>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
                         @enderror
                     </div>
                 </div>
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Create Membership</button>
+<<<<<<< HEAD
                     <button type="reset" class="btn btn-secondary">Clear Form</button>
+=======
+                    <button type="reset" class="btn btn-ghost">Clear Form</button>
+                    <p class="auth-switch">
+                        Already a member?
+                        <a href="{{ route('login') }}">Log in</a>
+                    </p>
+>>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
                 </div>
             </form>
         </div>
@@ -79,7 +149,11 @@
         <aside class="side-panel">
             <article class="info-box">
                 <p class="story-meta">Member Benefits</p>
+<<<<<<< HEAD
                 <h3>What your Fabel account unlocks</h3>
+=======
+                <h3>What your Fable account unlocks</h3>
+>>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
                 <ul class="check-list">
                     <li>Reserve specific story rooms for the atmosphere that suits your game.</li>
                     <li>Return faster for future visits with your member number already on file.</li>
@@ -92,11 +166,14 @@
                 <h3>Groups who plan their evenings around the game.</h3>
                 <p>Whether you are hosting a first visit or a regular campaign night, membership keeps your next session easy to book.</p>
             </article>
+<<<<<<< HEAD
 
             <div class="inline-links">
                 <a href="{{ route('index') }}" class="btn btn-outline">Back Home</a>
                 <a href="{{ route('login') }}" class="btn btn-outline">Already A Member</a>
             </div>
+=======
+>>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
         </aside>
     </section>
 </div>

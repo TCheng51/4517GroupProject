@@ -1,6 +1,10 @@
 <footer class="site-footer">
     <div class="shell footer-grid">
+<<<<<<< HEAD
         <p>&copy; 2026 Fabel Boardgame Cafe. Story-led tables, genre rooms, and warm tavern service.</p>
+=======
+        <p>&copy; 2026 Fable Boardgame Cafe. Story-led tables, genre rooms, and warm tavern service.</p>
+>>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
         <div class="footer-links">
             <a href="{{ route('register') }}">Membership</a>
             <a href="{{ route('reservation') }}">Reservations</a>

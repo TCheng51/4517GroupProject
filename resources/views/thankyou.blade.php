@@ -3,8 +3,16 @@
 @section('content')
 <div class="shell page">
     <section class="panel">
+<<<<<<< HEAD
         <span class="status-pill success">Thank You</span>
         <h2 class="section-title">Your next chapter at Fabel is on the calendar.</h2>
+=======
+        <span class="status-pill success">
+            <i data-lucide="heart" aria-hidden="true"></i>
+            Thank You
+        </span>
+        <h2 class="section-title">Your next chapter at Fable is on the calendar.</h2>
+>>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
         <div class="detail-grid">
             <article class="detail-item">
                 <span>Email</span>

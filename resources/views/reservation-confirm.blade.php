@@ -5,7 +5,11 @@
     <section class="panel">
         <p class="eyebrow">Reservation Guide</p>
         <h2 class="section-title">Review the evening before you book.</h2>
+<<<<<<< HEAD
         <p class="page-intro">Fabel reservations are designed to make each session feel hosted, comfortable, and matched to your game.</p>
+=======
+        <p class="page-intro">Fable reservations are designed to make each session feel hosted, comfortable, and matched to your game.</p>
+>>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
 
         <div class="cards-grid">
             <article class="info-box">
@@ -19,7 +23,11 @@
 
             <article class="info-box">
                 <h3>During the session</h3>
+<<<<<<< HEAD
                 <p>You will have a dedicated table or room, access to Fabel cafe service, and a setting designed to support the tone of your evening.</p>
+=======
+                <p>You will have a dedicated table or room, access to Fable cafe service, and a setting designed to support the tone of your evening.</p>
+>>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
             </article>
 
             <article class="info-box">

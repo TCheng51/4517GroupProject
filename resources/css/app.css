@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Login Status Styling */
 .login-content {
     margin-bottom: 20px;
@@ -40,3 +41,10 @@
 .btn-logout:hover {
     background: #c82333;
 }
+=======
+/*
+ * Source CSS — currently unused at runtime. The site serves
+ * /public/css/app.css directly (see layouts/app.blade.php).
+ * Keeping this file as a placeholder for a future Vite pipeline.
+ */
+>>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb

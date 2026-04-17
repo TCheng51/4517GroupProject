@@ -15,30 +15,24 @@ Route::redirect('/frontend/thankyou.html', '/thankyou');
 Route::redirect('/frontend/login.php', '/login');
 Route::redirect('/frontend/reserve.php', '/reservation');
 
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'processRegistration'])->name('register.store');
-Route::get('/register/confirm', [RegisterController::class, 'showConfirmationForm'])->name('register.confirm');
-Route::post('/register/confirm', [RegisterController::class, 'confirmRegistration'])->name('register.confirm.submit');
-Route::get('/register/success', [RegisterController::class, 'showSuccessPage'])->name('register.success');
-
-// AJAX routes for registration
-Route::post('/api/register', [RegisterController::class, 'ajaxRegister'])->name('register.ajax');
-Route::post('/api/check-email', [RegisterController::class, 'checkEmailAvailability'])->name('register.check-email');
-Route::post('/api/validate-registration', [RegisterController::class, 'validateRegistration'])->name('register.validate');
+Route::get('/register', [MemberController::class, 'create'])->name('register');
+Route::post('/register', [MemberController::class, 'store'])->name('register.store');
+Route::get('/register/confirm', [MemberController::class, 'confirmRegistration'])->name('register.confirm');
+Route::get('/register/success', [MemberController::class, 'registerSuccess'])->name('register.success');
 
 Route::get('/login', [MemberController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [MemberController::class, 'login'])->name('login.submit');
+Route::post('/login', [MemberController::class, 'login'])
+    ->middleware('throttle:6,1')
+    ->name('login.submit');
 
 Route::get('/reservation', [MemberController::class, 'showReservation'])->name('reservation');
 Route::get('/reservation/confirm', [MemberController::class, 'confirmReservation'])->name('reservation.confirm');
-Route::post('/reservation', [MemberController::class, 'makeReservation'])->name('reservation.submit');
+Route::post('/reservation', [MemberController::class, 'makeReservation'])
+    ->middleware('throttle:10,1')
+    ->name('reservation.submit');
 Route::get('/reservation/success', [MemberController::class, 'reservationSuccess'])->name('reservation.success');
 
 Route::post('/logout', [MemberController::class, 'logout'])->name('logout');
-
-Route::get('/menu', [MemberController::class, 'showMenu'])->name('menu');
-Route::get('/room-status', [MemberController::class, 'showRoomStatus'])->name('room-status');
-Route::post('/room-status/{reservation}', [MemberController::class, 'updateRoomStatus'])->name('room-status.update');
 
 Route::get('/thankyou', function () {
     return view('thankyou');
