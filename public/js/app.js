@@ -24,96 +24,30 @@ document.addEventListener("DOMContentLoaded", () => {
         reservationDate.min = tomorrow.toISOString().split("T")[0];
     }
 
-<<<<<<< HEAD
-    const roomSelect = document.querySelector("[data-room-select]");
-=======
     const reservationForm = document.querySelector("[data-reservation-form]");
     const roomSelect = document.querySelector("[data-room-select]");
     const timeSlotSelect = document.querySelector("#time_slot");
     const availabilityMessage = document.querySelector("[data-availability-message]");
->>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
     const previewTitle = document.querySelector("[data-room-title]");
     const previewMood = document.querySelector("[data-room-mood]");
     const previewCapacity = document.querySelector("[data-room-capacity]");
     const previewDetail = document.querySelector("[data-room-detail]");
 
-<<<<<<< HEAD
-    const roomThemes = {
-        "fantasy-hearth": {
-            title: "Fantasy Hearth",
-            mood: "Oak shelves, lantern light, and a fireside table for classic adventures.",
-            capacity: "Best for 4 players",
-            detail: "Ideal for trading games, co-op quests, and first campaigns that deserve a warm welcome."
-        },
-        "mythic-garden": {
-            title: "Mythic Garden",
-            mood: "A softer corner for families, social play, and whimsical storytelling.",
-            capacity: "Best for 4 players",
-            detail: "Choose this for approachable titles and lighter sessions with plenty of table conversation."
-        },
-        "iron-archive": {
-            title: "Iron Archive",
-            mood: "Brass details, map drawers, and a tactical atmosphere for strategy-heavy nights.",
-            capacity: "Best for 4 players",
-            detail: "Strong match for euros, deck builders, and longer games where focus matters."
-        },
-        "starlight-orbit": {
-            title: "Starlight Orbit",
-            mood: "A sci-fi room with sleek lines and low amber light for future-facing adventures.",
-            capacity: "Best for 6 players",
-            detail: "Perfect for space epics, hidden-role sessions, and larger groups who want their own zone."
-        },
-        "clockwork-vault": {
-            title: "Clockwork Vault",
-            mood: "Steampunk textures, private service, and room to spread out campaign boxes.",
-            capacity: "Best for 6 players",
-            detail: "Great for long-form scenarios, RPG one-shots, and games with lots of components."
-        },
-        "storykeeper-suite": {
-            title: "Storykeeper Suite",
-            mood: "Our most private room for celebrations, flagship sessions, and premium hosting.",
-            capacity: "Best for 8 players",
-            detail: "Reserve this suite when the game night itself is the event."
-        }
-    };
-
-=======
->>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
     const updateRoomPreview = () => {
         if (!roomSelect || !previewTitle || !previewMood || !previewCapacity || !previewDetail) {
             return;
         }
 
-<<<<<<< HEAD
-        const theme = roomThemes[roomSelect.value];
-
-        if (!theme) {
-            previewTitle.textContent = "Choose a story room";
-            previewMood.textContent = "Each space in Fabel is styled around a different genre so your table feels like part of the game.";
-=======
         const option = roomSelect.selectedOptions[0];
 
         if (!option || !option.value) {
             previewTitle.textContent = "Choose a story room";
             previewMood.textContent = "Each space in Fable is styled around a different genre so your table feels like part of the game.";
->>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
             previewCapacity.textContent = "Capacity will appear here";
             previewDetail.textContent = "Select a room to preview the atmosphere and the best fit for your session.";
             return;
         }
 
-<<<<<<< HEAD
-        previewTitle.textContent = theme.title;
-        previewMood.textContent = theme.mood;
-        previewCapacity.textContent = theme.capacity;
-        previewDetail.textContent = theme.detail;
-    };
-
-    if (roomSelect) {
-        roomSelect.addEventListener("change", updateRoomPreview);
-        updateRoomPreview();
-    }
-=======
         previewTitle.textContent = option.dataset.name || option.textContent.trim();
         previewMood.textContent = option.dataset.description || "This space is ready for your next session.";
         previewCapacity.textContent = option.dataset.capacity ? `Best for ${option.dataset.capacity} players` : "Capacity will appear here";
@@ -210,5 +144,4 @@ document.addEventListener("DOMContentLoaded", () => {
             btn.disabled = true;
         });
     });
->>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
 });

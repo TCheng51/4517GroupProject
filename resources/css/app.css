@@ -1,50 +1,5 @@
-<<<<<<< HEAD
-/* Login Status Styling */
-.login-content {
-    margin-bottom: 20px;
-}
-
-.login-label {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 600;
-    color: #495057;
-}
-
-.member-info {
-    color: #6c757d;
-    font-style: italic;
-}
-
-.guest-info {
-    color: #6c757d;
-    font-style: italic;
-}
-
-.logout-form {
-    margin: 0;
-    margin-left: 16px;
-}
-
-.btn-logout {
-    background: #dc3545;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.btn-logout:hover {
-    background: #c82333;
-}
-=======
 /*
  * Source CSS — currently unused at runtime. The site serves
  * /public/css/app.css directly (see layouts/app.blade.php).
  * Keeping this file as a placeholder for a future Vite pipeline.
  */
->>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
