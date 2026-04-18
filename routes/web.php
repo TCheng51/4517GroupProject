@@ -66,3 +66,11 @@ Route::get('/thankyou', function () {
 Route::get('/reservation-history', [MemberController::class, 'reservationHistory'])
     ->middleware('auth:web')
     ->name('reservation-history');
+
+Route::get('/profile', [MemberController::class, 'showProfile'])
+    ->middleware('auth:web')
+    ->name('profile');
+
+Route::patch('/profile', [MemberController::class, 'updateProfile'])
+    ->middleware('auth:web')
+    ->name('profile.update');
