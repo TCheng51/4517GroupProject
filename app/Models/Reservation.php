@@ -20,20 +20,9 @@ class Reservation extends Model
         'time_slot',
         'table_room',
         'status',
-<<<<<<< HEAD
-        'number_of_guests',
-        'total_amount',
-        'payment_status',
-        'special_requests',
-        'notes',
-        'confirmed_at',
-        'cancelled_at',
-        'confirmation_code',
-=======
         'confirmation_code',
         'confirmed_at',
         'cancelled_at',
->>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
         'guest_name',
         'guest_email',
         'guest_phone',
@@ -55,8 +44,6 @@ class Reservation extends Model
         return $this->belongsTo(Member::class);
     }
 
-<<<<<<< HEAD
-=======
     public function room(): BelongsTo
     {
         return $this->belongsTo(Room::class);
@@ -98,8 +85,6 @@ class Reservation extends Model
     {
         return $this->reservation_date?->isFuture() || $this->reservation_date?->isToday();
     }
-
->>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
     /**
      * Get the customer name (guest name or member full name)
      */

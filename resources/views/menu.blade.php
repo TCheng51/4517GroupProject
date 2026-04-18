@@ -4,13 +4,12 @@
 <div class="shell page">
     <section class="panel">
         <p class="eyebrow">Coffee Shop</p>
-        <h2 class="section-title">Fabel Coffee Shop Menu</h2>
-<<<<<<< HEAD
-        <p class="page-intro">Fuel your gaming sessions with our carefully curated selection of beverages, snacks, and meals inspired by fantasy realms and adventures.</p>
+        <h2 class="section-title">Fable Coffee Shop Menu</h2>
+        <p class="page-intro">Fuel your gaming sessions with beverages, snacks, meals, and desserts prepared for long table sessions.</p>
     </section>
 
     <div class="panel">
-        <!-- Coffee & Beverages Section -->
+        @forelse($menuItemsByCategory as $category => $items)
         <section class="menu-section">
             <div class="story-card">
                 <div class="story-icon" aria-hidden="true">☕</div>
@@ -390,7 +389,6 @@
                 </article>
             </div>
         </section>
-=======
         <p class="page-intro">Fuel your gaming sessions with beverages, snacks, meals, and desserts prepared for long table sessions.</p>
     </section>
 
@@ -463,7 +461,6 @@
         @empty
             <p>No menu items are available right now.</p>
         @endforelse
->>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
     </div>
 
     <div class="split-panel">
@@ -481,21 +478,11 @@
             <h3>Accommodations Available</h3>
             <p>Vegetarian, vegan, and gluten-free options available. Please ask our staff about ingredients and allergens.</p>
             <div class="hero-actions">
-<<<<<<< HEAD
-                <span class="status-pill">V</span>
-                <span class="status-pill">VG</span>
-                <span class="status-pill">GF</span>
-=======
                 <span class="status-pill" title="Vegetarian">V</span>
                 <span class="status-pill" title="Vegan">VG</span>
                 <span class="status-pill" title="Gluten-Free">GF</span>
->>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
             </div>
         </aside>
     </div>
 </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> cab9cfdee1c177ab35c534b66d3680996e16d5fb
 @endsection

@@ -15,16 +15,18 @@ Route::redirect('/frontend/thankyou.html', '/thankyou');
 Route::redirect('/frontend/login.php', '/login');
 Route::redirect('/frontend/reserve.php', '/reservation');
 
-Route::get('/register', [MemberController::class, 'create'])->name('register');
-Route::post('/register', [MemberController::class, 'store'])->name('register.store');
-Route::get('/register/confirm', [MemberController::class, 'confirmRegistration'])->name('register.confirm');
-Route::get('/register/success', [MemberController::class, 'registerSuccess'])->name('register.success');
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'processRegistration'])->name('register.store');
+Route::get('/register/confirm', [RegisterController::class, 'showConfirmationForm'])->name('register.confirm');
+Route::post('/register/confirm', [RegisterController::class, 'confirmRegistration'])->name('register.confirm.submit');
+Route::get('/register/success', [RegisterController::class, 'showSuccessPage'])->name('register.success');
 
 Route::get('/login', [MemberController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [MemberController::class, 'login'])
     ->middleware('throttle:6,1')
     ->name('login.submit');
 
+Route::get('/menu', [MemberController::class, 'showMenu'])->name('menu');
 Route::get('/reservation', [MemberController::class, 'showReservation'])->name('reservation');
 Route::get('/reservation/confirm', [MemberController::class, 'confirmReservation'])->name('reservation.confirm');
 Route::post('/reservation', [MemberController::class, 'makeReservation'])
@@ -34,6 +36,28 @@ Route::get('/reservation/success', [MemberController::class, 'reservationSuccess
 
 Route::post('/logout', [MemberController::class, 'logout'])->name('logout');
 
+Route::get('/room-status', [MemberController::class, 'showRoomStatus'])
+    ->name('room-status');
+Route::post('/room-status/{reservation}', [MemberController::class, 'updateRoomStatus'])
+    ->name('room-status.update');
+
+Route::get('/my-reservations', [MemberController::class, 'myReservations'])
+    ->middleware('auth')
+    ->name('my-reservations');
+Route::get('/my-reservations/{reservation}/edit', [MemberController::class, 'editReservation'])
+    ->middleware('auth')
+    ->name('reservations.edit');
+Route::put('/my-reservations/{reservation}', [MemberController::class, 'updateReservation'])
+    ->middleware('auth')
+    ->name('reservations.update');
+Route::delete('/my-reservations/{reservation}', [MemberController::class, 'cancelReservation'])
+    ->middleware('auth')
+    ->name('reservations.cancel');
+
+Route::get('/reservation/availability', [MemberController::class, 'availability'])
+    ->name('reservation.availability');
+
 Route::get('/thankyou', function () {
     return view('thankyou');
 })->name('thankyou');
+
