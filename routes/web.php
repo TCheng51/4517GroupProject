@@ -62,3 +62,7 @@ Route::get('/reservation/availability', [MemberController::class, 'availability'
 Route::get('/thankyou', function () {
     return view('thankyou');
 })->name('thankyou');
+
+Route::get('/reservation-history', [MemberController::class, 'reservationHistory'])
+    ->middleware('auth:web')
+    ->name('reservation-history');
