@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
 use App\Http\Requests\UpdateRoomStatusRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Mail\ReservationConfirmationMail;
 use App\Models\MenuItem;
 use App\Models\Member;
