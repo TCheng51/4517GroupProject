@@ -37,8 +37,10 @@ Route::get('/reservation/success', [MemberController::class, 'reservationSuccess
 Route::post('/logout', [MemberController::class, 'logout'])->name('logout');
 
 Route::get('/room-status', [MemberController::class, 'showRoomStatus'])
+    ->middleware('auth')
     ->name('room-status');
 Route::post('/room-status/{reservation}', [MemberController::class, 'updateRoomStatus'])
+    ->middleware('auth')
     ->name('room-status.update');
 
 Route::get('/my-reservations', [MemberController::class, 'myReservations'])
@@ -46,13 +48,13 @@ Route::get('/my-reservations', [MemberController::class, 'myReservations'])
     ->name('my-reservations');
 Route::get('/my-reservations/{reservation}/edit', [MemberController::class, 'editReservation'])
     ->middleware('auth')
-    ->name('reservations.edit');
-Route::put('/my-reservations/{reservation}', [MemberController::class, 'updateReservation'])
+    ->name('my-reservations.edit');
+Route::patch('/my-reservations/{reservation}', [MemberController::class, 'updateReservation'])
     ->middleware('auth')
-    ->name('reservations.update');
-Route::delete('/my-reservations/{reservation}', [MemberController::class, 'cancelReservation'])
+    ->name('my-reservations.update');
+Route::post('/my-reservations/{reservation}/cancel', [MemberController::class, 'cancelReservation'])
     ->middleware('auth')
-    ->name('reservations.cancel');
+    ->name('my-reservations.cancel');
 
 Route::get('/reservation/availability', [MemberController::class, 'availability'])
     ->name('reservation.availability');
@@ -60,4 +62,3 @@ Route::get('/reservation/availability', [MemberController::class, 'availability'
 Route::get('/thankyou', function () {
     return view('thankyou');
 })->name('thankyou');
-

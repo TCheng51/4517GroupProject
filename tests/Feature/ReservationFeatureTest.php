@@ -134,11 +134,13 @@ class ReservationFeatureTest extends TestCase
             ->assertOk()
             ->assertSee('MEMBER0001');
 
-        $this->patch(route('my-reservations.update', $reservation), [
+        $response = $this->patch(route('my-reservations.update', $reservation), [
             'reservation_date' => now()->addDays(5)->toDateString(),
             'time_slot' => $timeSlot->label,
             'table_room' => $newRoom->slug,
-        ])->assertRedirect(route('my-reservations'));
+        ]);
+
+        $response->assertRedirect(route('my-reservations'));
 
         $reservation->refresh();
         $this->assertSame('pending', $reservation->status);

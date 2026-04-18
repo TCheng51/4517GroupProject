@@ -149,8 +149,10 @@ class MemberController extends Controller
 
             throw $e;
         } catch (QueryException $e) {
-            if (str_contains($e->getMessage(), 'reservations_member_slot_unique')
-                || str_contains($e->getMessage(), 'UNIQUE constraint failed')) {
+            if (
+                str_contains($e->getMessage(), 'reservations_member_slot_unique')
+                || str_contains($e->getMessage(), 'UNIQUE constraint failed')
+            ) {
                 return back()
                     ->withErrors(['table_room' => 'You already have a reservation for that room and time.'])
                     ->withInput();
@@ -321,6 +323,8 @@ class MemberController extends Controller
 
     public function showRoomStatus(Request $request): \Illuminate\View\View
     {
+        abort_unless(Auth::check() && Auth::user()->is_admin, 403);
+
         $rooms = Room::active()->orderBy('sort_order')->get();
         $timeSlots = TimeSlot::active()->orderBy('sort_order')->get();
         $selectedDate = $this->selectedStatusDate($request->query('date'));
@@ -348,7 +352,7 @@ class MemberController extends Controller
 
             foreach ($timeSlots as $timeSlot) {
                 $booked = $bookedCounts
-                    ->filter(fn ($count) => (
+                    ->filter(fn($count) => (
                         ((int) $count->room_id === (int) $room->id && (int) $count->time_slot_id === (int) $timeSlot->id)
                         || ($count->table_room === $room->slug && $count->time_slot === $timeSlot->label)
                     ))
@@ -360,8 +364,8 @@ class MemberController extends Controller
 
         $baseQuery = Reservation::with(['member', 'room', 'timeSlot', 'reservationMenuItems.menuItem'])
             ->whereDate('reservation_date', $selectedDate)
-            ->when($selectedRoom, fn ($query) => $query->where(function ($query) use ($selectedRoom) {
-                $query->whereHas('room', fn ($roomQuery) => $roomQuery->where('slug', $selectedRoom))
+            ->when($selectedRoom, fn($query) => $query->where(function ($query) use ($selectedRoom) {
+                $query->whereHas('room', fn($roomQuery) => $roomQuery->where('slug', $selectedRoom))
                     ->orWhere('table_room', $selectedRoom);
             }));
 
@@ -370,7 +374,7 @@ class MemberController extends Controller
         $confirmedReservations = (clone $baseQuery)->where('status', 'confirmed')->count();
 
         $todayReservations = $baseQuery
-            ->when($selectedStatus, fn ($query) => $query->where('status', $selectedStatus))
+            ->when($selectedStatus, fn($query) => $query->where('status', $selectedStatus))
             ->orderBy('time_slot')
             ->orderBy('table_room')
             ->simplePaginate(50)
@@ -401,6 +405,24 @@ class MemberController extends Controller
         ));
     }
 
+    public function updateRoomStatus(UpdateRoomStatusRequest $request, Reservation $reservation): \Illuminate\Http\RedirectResponse
+    {
+        abort_unless(Auth::check() && Auth::user()->is_admin, 403);
+
+        $validated = $request->validated();
+        $reservation->update([
+            'status' => $validated['status'],
+            'cancelled_at' => $validated['status'] === 'cancelled' ? now() : null,
+            'confirmed_at' => $validated['status'] === 'confirmed' ? now() : null,
+        ]);
+
+        $this->sendReservationMail($reservation, $validated['status']);
+
+        return redirect()
+            ->route('room-status', ['date' => $reservation->reservation_date])
+            ->with('success', 'Reservation status updated successfully.');
+    }
+
     public function logout(Request $request): \Illuminate\Http\RedirectResponse
     {
         Auth::guard('web')->logout();
@@ -415,7 +437,7 @@ class MemberController extends Controller
         $booked = Reservation::query()
             ->whereDate('reservation_date', $date)
             ->where('status', '!=', 'cancelled')
-            ->when($excludeReservationId, fn ($query) => $query->whereKeyNot($excludeReservationId))
+            ->when($excludeReservationId, fn($query) => $query->whereKeyNot($excludeReservationId))
             ->where(function ($query) use ($room, $timeSlot) {
                 $query->where(function ($query) use ($room, $timeSlot) {
                     $query->where('room_id', $room->id)
@@ -434,8 +456,8 @@ class MemberController extends Controller
     private function storeReservationMenuItems(Reservation $reservation, array $menuItems): void
     {
         $quantities = collect($menuItems)
-            ->map(fn ($quantity) => (int) $quantity)
-            ->filter(fn ($quantity) => $quantity > 0);
+            ->map(fn($quantity) => (int) $quantity)
+            ->filter(fn($quantity) => $quantity > 0);
 
         if ($quantities->isEmpty()) {
             return;

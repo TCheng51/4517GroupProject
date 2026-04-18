@@ -9,7 +9,6 @@
     </section>
 
     <div class="panel">
-        @forelse($menuItemsByCategory as $category => $items)
         <section class="menu-section">
             <div class="story-card">
                 <div class="story-icon" aria-hidden="true">☕</div>

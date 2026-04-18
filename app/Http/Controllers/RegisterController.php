@@ -6,6 +6,7 @@ use App\Http\Requests\CheckEmailRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\RegistrationConfirmationMail;
 use App\Models\Member;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -13,9 +14,6 @@ use Illuminate\Support\Facades\Session;
 
 class RegisterController extends Controller
 {
-    /**
-     * Show the registration form
-     */
     public function showRegistrationForm(): \Illuminate\View\View
     {
         return view('auth.register');
@@ -28,18 +26,13 @@ class RegisterController extends Controller
         }
 
         $registrationData = Session::get('registration_data');
-        // Never expose (hashed) password to the confirmation view.
         unset($registrationData['password']);
 
         return view('auth.register-confirm', compact('registrationData'));
     }
 
-    /**
-     * Process registration form and show confirmation
-     */
     public function processRegistration(RegisterRequest $request): \Illuminate\Http\RedirectResponse
     {
-        // Hash password now so that plaintext never touches the session store.
         $data = $request->safe()->except(['password', 'password_confirmation']);
         $data['password'] = Hash::make($request->input('password'));
         Session::put('registration_data', $data);
@@ -56,8 +49,6 @@ class RegisterController extends Controller
         $data = Session::get('registration_data');
 
         try {
-            // Password is already hashed (see processRegistration). The Member
-            // model's `hashed` cast is idempotent, so this passes through safely.
             $member = Member::create([
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
@@ -75,38 +66,11 @@ class RegisterController extends Controller
                 'last_name' => $member->last_name,
                 'email' => $member->email,
             ]);
+            Session::flash('email_simulated', 'Membership confirmation email simulated for ' . $member->email . '.');
 
-            return redirect()->route('register.success', ['member' => $member]);
+            Mail::to($member->email)->send(new RegistrationConfirmationMail($member));
 
-        } catch (\Exception $e) {
-            // Log error
-            Log::error('Registration failed: ' . $e->getMessage());
-
-            return redirect()->route('register')
-                        ->with('error', 'Registration failed. Please try again.')
-                        ->withInput();
-        }
-    }
-
-    /**
-     * Show the registration success page
-     */
-    public function showSuccessPage(): \Illuminate\View\View|\Illuminate\Http\RedirectResponse
-    {
-        if (!Session::has('member_info')) {
-            return redirect()->route('login');
-        }
-
-        $memberInfo = Session::get('member_info');
-
-        // Create a member object for the view
-        $member = (object) $memberInfo;
-
-        Session::flash('email_simulated', 'Membership confirmation email simulated for ' . $member->email . '.');
-
-        Mail::to($member->email)->send(new RegistrationConfirmationMail($member));
-
-        return redirect()->route('register.success');
+            return redirect()->route('register.success');
         } catch (\Throwable $e) {
             Log::error('Registration failed', ['exception' => $e]);
 
@@ -120,15 +84,16 @@ class RegisterController extends Controller
     {
         if (! Session::has('member_info')) {
             return redirect()->route('login');
+        }
+
         $member = (object) Session::get('member_info');
 
         return view('auth.register-success', compact('member'));
     }
 
-    public function ajaxRegister(RegisterRequest $request): \Illuminate\Http\JsonResponse
+    public function ajaxRegister(RegisterRequest $request): JsonResponse
     {
         try {
-            // Password hashed by the Member model's cast.
             $member = Member::create($request->safe()->except(['password_confirmation']));
             Mail::to($member->email)->send(new RegistrationConfirmationMail($member));
 
@@ -152,42 +117,8 @@ class RegisterController extends Controller
             ], 500);
         }
     }
-     * Check if email is available (for real-time validation)
-     */
-    public function checkEmailAvailability(Request $request): \Illuminate\Http\JsonResponse
-    {
-        $email = $request->input('email');
-        $exists = Member::where('email', $email)->exists();
 
-        return response()->json([
-            'available' => !$exists,
-            'message' => $exists ? 'Email is already taken' : 'Email is available'
-        ]);
-    }
-
-    /**
-     * Validate registration form (for real-time validation)
-     */
-    public function validateRegistration(Request $request): \Illuminate\Http\JsonResponse
-    {
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:members',
-            'phone' => 'required|string|max:20',
-            'address' => 'required|string|max:500',
-            'password' => 'required|string|min:8',
-            'password_confirmation' => 'required|string|same:password',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'valid' => false,
-                'errors' => $validator->errors()
-            ]);
-        }
-
-            public function checkEmailAvailability(CheckEmailRequest $request): \Illuminate\Http\JsonResponse
+    public function checkEmailAvailability(CheckEmailRequest $request): JsonResponse
     {
         $email = $request->validated()['email'];
         $exists = Member::where('email', $email)->exists();
@@ -198,9 +129,8 @@ class RegisterController extends Controller
         ]);
     }
 
-    public function validateRegistration(RegisterRequest $request): \Illuminate\Http\JsonResponse
+    public function validateRegistration(RegisterRequest $request): JsonResponse
     {
-        // If we reach this method the FormRequest has already validated.
         return response()->json([
             'valid' => true,
             'message' => 'Form is valid',
