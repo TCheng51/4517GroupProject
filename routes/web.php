@@ -75,3 +75,14 @@ Route::get('/profile', [MemberController::class, 'showProfile'])
 Route::patch('/profile', [MemberController::class, 'updateProfile'])
     ->middleware('auth:web')
     ->name('profile.update');
+
+Route::get('/events', [EventController::class, 'index'])->name('events');
+Route::get('/events/{event:slug}', [EventController::class, 'show'])->name('events.show');
+
+Route::post('/events/{event}/register', [EventController::class, 'register'])
+    ->middleware('auth:web')
+    ->name('events.register');
+
+Route::post('/events/{event}/cancel', [EventController::class, 'cancelRegistration'])
+    ->middleware('auth:web')
+    ->name('events.cancel');
