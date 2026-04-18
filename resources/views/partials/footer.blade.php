@@ -4,6 +4,9 @@
         <div class="footer-links">
             <a href="{{ route('register') }}">Membership</a>
             <a href="{{ route('reservation') }}">Reservations</a>
+            @auth
+                <a href="{{ route('profile') }}">Profile</a>
+            @endauth
             <a href="{{ route('login') }}">Member Login</a>
         </div>
     </div>
