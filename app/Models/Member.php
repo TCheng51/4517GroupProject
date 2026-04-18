@@ -49,5 +49,17 @@ class Member extends Authenticatable
     public function reservations()
     {
         return $this->hasMany(Reservation::class);
+        
+    public function eventRegistrations()
+    {
+        return $this->hasMany(EventRegistration::class);
+    }
+    
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'event_registrations')
+            ->withPivot('status')
+            ->withTimestamps();
+    }
     }
 }
