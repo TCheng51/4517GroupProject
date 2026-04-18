@@ -61,12 +61,12 @@ class MemberSeeder extends Seeder
                 'password' => 'password123',
                 'is_admin' => false,
             ],
-            // Test admin — email: admin@fable.com / password: admin1234
+            // Test admin — email: admin@fable.test / password: admin1234
             [
                 'member_number' => '9999',
                 'first_name' => 'Fable',
                 'last_name' => 'Admin',
-                'email' => 'admin@fable.com',
+                'email' => 'admin@fable.test',
                 'phone' => '85200000000',
                 'address' => 'Fable Tavern, Story Lane',
                 'password' => 'admin1234',
