@@ -5,6 +5,7 @@
     @auth
         <a href="{{ route('my-reservations') }}" class="nav-link {{ request()->routeIs('my-reservations', 'my-reservations.*') ? 'is-active' : '' }}">My Reservations</a>
         <a href="{{ route('reservation-history') }}" class="nav-link {{ request()->routeIs('reservation-history') ? 'is-active' : '' }}">History</a>
+        <a href="{{ route('profile') }}" class="nav-link {{ request()->routeIs('profile') ? 'is-active' : '' }}">Profile</a>
         @if(Auth::user()->is_admin)
             <a href="{{ route('room-status') }}" class="nav-link {{ request()->routeIs('room-status') ? 'is-active' : '' }}">Room Status</a>
         @endif
