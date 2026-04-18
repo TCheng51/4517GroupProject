@@ -37,6 +37,7 @@
             </article>
         </div>
 
+        <h2 class="section-title">Reservation Statistics</h2>
         <div class="stats-grid">
             <article class="stat-card">
                 <p class="stat-number">{{ $totalReservations }}</p>
