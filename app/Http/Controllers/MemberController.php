@@ -422,7 +422,64 @@ class MemberController extends Controller
             ->route('room-status', ['date' => $reservation->reservation_date])
             ->with('success', 'Reservation status updated successfully.');
     }
-
+    public function reservationHistory(Request $request): \Illuminate\View\View
+    {
+        $query = Auth::user()
+            ->reservations()
+            ->with(['room', 'timeSlot', 'reservationMenuItems.menuItem']);
+    
+        
+        if ($request->filled('status') && in_array($request->query('status'), ['pending', 'confirmed', 'cancelled'], true)) {
+            $query->where('status', $request->query('status'));
+        }
+    
+        
+        if ($request->filled('from')) {
+            try {
+                $from = Carbon::parse($request->query('from'))->startOfDay();
+                $query->where('reservation_date', '>=', $from);
+            } catch (\Throwable) {}
+        }
+    
+        if ($request->filled('to')) {
+            try {
+                $to = Carbon::parse($request->query('to'))->endOfDay();
+                $query->where('reservation_date', '<=', $to);
+            } catch (\Throwable) {}
+        }
+    
+        
+        if ($request->filled('room')) {
+            $query->where(function ($q) use ($request) {
+                $q->whereHas('room', fn ($r) => $r->where('slug', $request->query('room')))
+                  ->orWhere('table_room', $request->query('room'));
+            });
+        }
+    
+        $reservations = $query
+            ->orderByDesc('reservation_date')
+            ->orderByDesc('id')
+            ->simplePaginate(10)
+            ->withQueryString();
+    
+        
+        $allReservations = Auth::user()->reservations();
+        $totalCount      = (clone $allReservations)->count();
+        $confirmedCount  = (clone $allReservations)->where('status', 'confirmed')->count();
+        $pendingCount    = (clone $allReservations)->where('status', 'pending')->count();
+        $cancelledCount  = (clone $allReservations)->where('status', 'cancelled')->count();
+    
+        $rooms = Room::active()->orderBy('sort_order')->get();
+    
+        return view('reservation-history', compact(
+            'reservations',
+            'rooms',
+            'totalCount',
+            'confirmedCount',
+            'pendingCount',
+            'cancelledCount'
+        ));
+    }
     public function logout(Request $request): \Illuminate\Http\RedirectResponse
     {
         Auth::guard('web')->logout();
