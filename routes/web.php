@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\EventController;
 
 Route::get('/', [MemberController::class, 'home'])->name('index');
 Route::redirect('/home', '/')->name('home');
