@@ -238,8 +238,9 @@ class MemberController extends Controller
 
     public function myReservations(): \Illuminate\View\View
     {
-        $reservations = Auth::user()
-            ->reservations()
+        /** @var \App\Models\Member $member */
+        $member = Auth::user();
+        $reservations = $member->reservations()
             ->with(['room', 'timeSlot', 'reservationMenuItems.menuItem'])
             ->orderByDesc('reservation_date')
             ->orderByDesc('id')
@@ -425,6 +426,7 @@ class MemberController extends Controller
     }
 public function showProfile(): \Illuminate\View\View
 {
+    /** @var \App\Models\Member $member */
     $member = Auth::user();
 
     $totalReservations    = $member->reservations()->count();
@@ -446,6 +448,7 @@ public function showProfile(): \Illuminate\View\View
 
 public function updateProfile(UpdateProfileRequest $request): \Illuminate\Http\RedirectResponse
 {
+    /** @var \App\Models\Member $member */
     $member    = Auth::user();
     $validated = $request->validated();
 
@@ -463,6 +466,67 @@ public function updateProfile(UpdateProfileRequest $request): \Illuminate\Http\R
 
     return redirect()->route('profile')->with('success', 'Profile updated successfully.');
 }
+
+    public function reservationHistory(Request $request): \Illuminate\View\View
+    {
+        /** @var \App\Models\Member $member */
+        $member = Auth::user();
+
+        $query = $member->reservations()
+            ->with(['room', 'timeSlot', 'reservationMenuItems.menuItem']);
+
+        // Apply status filter
+        if ($request->filled('status') && in_array($request->status, ['pending', 'confirmed', 'cancelled'])) {
+            $query->where('status', $request->status);
+        }
+
+        // Apply room filter
+        if ($request->filled('room')) {
+            $query->whereHas('room', fn ($q) => $q->where('slug', $request->room));
+        }
+
+        // Apply date range filters
+        if ($request->filled('from')) {
+            try {
+                $from = \Illuminate\Support\Carbon::parse($request->from)->toDateString();
+                $query->whereDate('reservation_date', '>=', $from);
+            } catch (\Throwable) {
+                // Ignore invalid date
+            }
+        }
+
+        if ($request->filled('to')) {
+            try {
+                $to = \Illuminate\Support\Carbon::parse($request->to)->toDateString();
+                $query->whereDate('reservation_date', '<=', $to);
+            } catch (\Throwable) {
+                // Ignore invalid date
+            }
+        }
+
+        $reservations = $query->orderByDesc('reservation_date')
+            ->orderByDesc('id')
+            ->simplePaginate(10)
+            ->withQueryString();
+
+        // Calculate stats for all reservations (unfiltered)
+        $totalCount = $member->reservations()->count();
+        $confirmedCount = $member->reservations()->where('status', 'confirmed')->count();
+        $pendingCount = $member->reservations()->where('status', 'pending')->count();
+        $cancelledCount = $member->reservations()->where('status', 'cancelled')->count();
+
+        $rooms = Room::active()->orderBy('sort_order')->get();
+
+        return view('reservation-history', compact(
+            'reservations',
+            'totalCount',
+            'confirmedCount',
+            'pendingCount',
+            'cancelledCount',
+            'rooms'
+        ));
+    }
+
     public function logout(Request $request): \Illuminate\Http\RedirectResponse
     {
         Auth::guard('web')->logout();
