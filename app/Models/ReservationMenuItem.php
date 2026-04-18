@@ -17,14 +17,11 @@ class ReservationMenuItem extends Model
         'line_total',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'quantity' => 'integer',
-            'unit_price' => 'decimal:2',
-            'line_total' => 'decimal:2',
-        ];
-    }
+    protected $casts = [
+        'quantity' => 'integer',
+        'unit_price' => 'decimal:2',
+        'line_total' => 'decimal:2',
+    ];
 
     public function reservation(): BelongsTo
     {

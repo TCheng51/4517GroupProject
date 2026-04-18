@@ -76,11 +76,16 @@ class MemberSeeder extends Seeder
 
         DB::transaction(function () use ($members) {
             foreach ($members as $member) {
-                // The Member model's 'hashed' cast hashes the password on insert.
-                Member::updateOrCreate(
-                    ['email' => $member['email']],
-                    $member
-                );
+                // Match existing members by email or member number to avoid duplicate unique keys.
+                $existing = Member::where('email', $member['email'])
+                    ->orWhere('member_number', $member['member_number'])
+                    ->first();
+
+                if ($existing) {
+                    $existing->update($member);
+                } else {
+                    Member::create($member);
+                }
             }
         });
 

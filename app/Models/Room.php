@@ -19,14 +19,11 @@ class Room extends Model
         'sort_order',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'capacity' => 'integer',
-            'is_active' => 'boolean',
-            'sort_order' => 'integer',
-        ];
-    }
+    protected $casts = [
+        'capacity' => 'integer',
+        'is_active' => 'boolean',
+        'sort_order' => 'integer',
+    ];
 
     public function scopeActive(Builder $query): Builder
     {

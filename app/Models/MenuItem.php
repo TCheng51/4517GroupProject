@@ -20,15 +20,12 @@ class MenuItem extends Model
         'sort_order',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'price' => 'decimal:2',
-            'tags' => 'array',
-            'is_active' => 'boolean',
-            'sort_order' => 'integer',
-        ];
-    }
+    protected $casts = [
+        'price' => 'decimal:2',
+        'tags' => 'array',
+        'is_active' => 'boolean',
+        'sort_order' => 'integer',
+    ];
 
     public function scopeActive(Builder $query): Builder
     {

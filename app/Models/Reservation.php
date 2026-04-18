@@ -29,15 +29,12 @@ class Reservation extends Model
         'is_guest',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'reservation_date' => 'date',
-            'is_guest' => 'boolean',
-            'confirmed_at' => 'datetime',
-            'cancelled_at' => 'datetime',
-        ];
-    }
+    protected $casts = [
+        'reservation_date' => 'date',
+        'is_guest' => 'boolean',
+        'confirmed_at' => 'datetime',
+        'cancelled_at' => 'datetime',
+    ];
 
     public function member(): BelongsTo
     {

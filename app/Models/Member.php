@@ -41,13 +41,10 @@ class Member extends Authenticatable
         'remember_token',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'password' => 'hashed',
-            'is_admin' => 'boolean',
-        ];
-    }
+    protected $casts = [
+        'password' => 'hashed',
+        'is_admin' => 'boolean',
+    ];
 
     public function reservations()
     {
