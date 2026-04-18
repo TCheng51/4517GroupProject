@@ -1,6 +1,7 @@
 <nav class="navbar" id="site-nav" data-nav>
     <a href="{{ route('index') }}" class="nav-link {{ request()->routeIs('index') ? 'is-active' : '' }}">Home</a>
     <a href="{{ route('menu') }}" class="nav-link {{ request()->routeIs('menu') ? 'is-active' : '' }}">Menu</a>
+    <a href="{{ route('events') }}" class="nav-link {{ request()->routeIs('events', 'events.*') ? 'is-active' : '' }}">Events</a>
     <a href="{{ route('reservation') }}" class="nav-link {{ request()->routeIs('reservation', 'reservation.*') ? 'is-active' : '' }}">Reservation</a>
     @auth
         <a href="{{ route('my-reservations') }}" class="nav-link {{ request()->routeIs('my-reservations', 'my-reservations.*') ? 'is-active' : '' }}">My Reservations</a>
