@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
 use App\Http\Requests\UpdateRoomStatusRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Mail\ReservationConfirmationMail;
 use App\Models\MenuItem;
 use App\Models\Member;
@@ -422,7 +423,46 @@ class MemberController extends Controller
             ->route('room-status', ['date' => $reservation->reservation_date])
             ->with('success', 'Reservation status updated successfully.');
     }
+public function showProfile(): \Illuminate\View\View
+{
+    $member = Auth::user();
 
+    $totalReservations    = $member->reservations()->count();
+    $upcomingReservations = $member->reservations()
+        ->where('status', '!=', 'cancelled')
+        ->where('reservation_date', '>=', today())
+        ->count();
+    $cancelledReservations = $member->reservations()
+        ->where('status', 'cancelled')
+        ->count();
+
+    return view('profile', compact(
+        'member',
+        'totalReservations',
+        'upcomingReservations',
+        'cancelledReservations'
+    ));
+}
+
+public function updateProfile(UpdateProfileRequest $request): \Illuminate\Http\RedirectResponse
+{
+    $member    = Auth::user();
+    $validated = $request->validated();
+
+    $member->first_name = $validated['first_name'];
+    $member->last_name  = $validated['last_name'];
+    $member->email      = $validated['email'];
+    $member->phone      = $validated['phone'];
+    $member->address    = $validated['address'];
+
+    if (! empty($validated['password'])) {
+        $member->password = $validated['password'];
+    }
+
+    $member->save();
+
+    return redirect()->route('profile')->with('success', 'Profile updated successfully.');
+}
     public function logout(Request $request): \Illuminate\Http\RedirectResponse
     {
         Auth::guard('web')->logout();
