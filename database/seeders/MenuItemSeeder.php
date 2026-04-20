@@ -27,6 +27,12 @@ class MenuItemSeeder extends Seeder
             ['category' => 'Desserts', 'name' => 'Treasure Chest Brownie', 'description' => 'Fudgy brownie with gold chocolate coins and hidden gems', 'price' => 32, 'tags' => ['Chocolate', 'Decadent'], 'sort_order' => 310],
             ['category' => 'Desserts', 'name' => 'Enchanted Forest Cake', 'description' => 'Chocolate cake with mushroom meringues and moss-green frosting', 'price' => 38, 'tags' => ['Chocolate', 'Artistic'], 'sort_order' => 320],
             ['category' => 'Desserts', 'name' => 'Crystal Cupcake', 'description' => 'Vanilla cupcake with crystallized sugar and edible glitter', 'price' => 20, 'tags' => ['Sweet', 'Sparkling'], 'sort_order' => 330],
+            ['category' => 'Games', 'name' => 'Catan: Cities & Knights', 'description' => 'Expansion to the classic Catan with city development and knight mechanics for 3-4 players.', 'price' => 0, 'tags' => ['Strategy', '3-4 Players'], 'sort_order' => 410],
+            ['category' => 'Games', 'name' => 'Wingspan', 'description' => 'Bird-themed engine building game where players collect birds, food, and eggs to build a preserve.', 'price' => 0, 'tags' => ['Engine Building', '1-5 Players'], 'sort_order' => 420],
+            ['category' => 'Games', 'name' => 'Gloomhaven', 'description' => 'Epic tactical combat campaign game with monsters, levels, and a massive legacy world.', 'price' => 0, 'tags' => ['Campaign', '1-4 Players'], 'sort_order' => 430],
+            ['category' => 'Games', 'name' => 'Azul', 'description' => 'Tile-laying mosaic game that is easy to learn and challenging to master for 2-4 players.', 'price' => 0, 'tags' => ['Abstract', '2-4 Players'], 'sort_order' => 440],
+            ['category' => 'Games', 'name' => 'Pandemic Legacy: Season 1', 'description' => 'Cooperative campaign where decisions permanently change the game and save humanity.', 'price' => 0, 'tags' => ['Cooperative', '2-4 Players'], 'sort_order' => 450],
+            ['category' => 'Games', 'name' => 'Terraforming Mars', 'description' => 'Resource management game where players compete to make Mars habitable.', 'price' => 0, 'tags' => ['Economic', '1-5 Players'], 'sort_order' => 460],
         ];
 
         foreach ($items as $item) {

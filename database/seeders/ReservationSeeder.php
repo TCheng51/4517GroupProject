@@ -50,6 +50,9 @@ class ReservationSeeder extends Seeder
                 $timeSlot = $timeSlots[$entry['slot']];
                 $date = now()->addDays($entry['offset'])->format('Y-m-d');
 
+                $baseCode = 'FBSEED' . str_pad((string) ($i + 1), 4, '0', STR_PAD_LEFT);
+                $confirmationCode = $this->makeUniqueConfirmationCode($baseCode);
+
                 Reservation::updateOrCreate([
                     'member_id' => $member->id,
                     'reservation_date' => $date,
@@ -59,7 +62,7 @@ class ReservationSeeder extends Seeder
                     'time_slot' => $timeSlot->label,
                     'table_room' => $room->slug,
                     'status' => $entry['status'],
-                    'confirmation_code' => 'FBSEED' . str_pad((string) ($i + 1), 4, '0', STR_PAD_LEFT),
+                    'confirmation_code' => $confirmationCode,
                     'confirmed_at' => $entry['status'] === 'confirmed' ? now() : null,
                     'cancelled_at' => $entry['status'] === 'cancelled' ? now() : null,
                 ]);
@@ -67,5 +70,17 @@ class ReservationSeeder extends Seeder
         });
 
         $this->command->info('Reservations seeded successfully! (' . count($plan) . ' rows)');
+    }
+
+    private function makeUniqueConfirmationCode(string $baseCode): string
+    {
+        $code = $baseCode;
+        $suffix = 1;
+
+        while (Reservation::where('confirmation_code', $code)->exists()) {
+            $code = sprintf('%s-%d', $baseCode, $suffix++);
+        }
+
+        return $code;
     }
 }
